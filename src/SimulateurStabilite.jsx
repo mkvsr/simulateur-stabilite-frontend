@@ -36,6 +36,8 @@ const T = {
     waterBallast: "Lestage à l'eau",
     loader: "Chargeur frontal",
     loaderPos: "Position",
+    loaderSerie: "Chargeur de série",
+    disable: "Désactiver", enable: "Activer",
     low: "Basse", high: "Haute",
     results: "Résultats",
     transport: "Transport", work: "Travail",
@@ -66,6 +68,8 @@ const T = {
     waterBallast: "Water ballast",
     loader: "Front loader",
     loaderPos: "Position",
+    loaderSerie: "Default loader",
+    disable: "Disable", enable: "Enable",
     low: "Low", high: "High",
     results: "Results",
     transport: "Transport", work: "Work",
@@ -98,6 +102,44 @@ function statusColor(status) {
   if (status.includes("OK")) return { bg: "#EAF3DE", fg: "#3B6D11" };
   if (status.includes("vert") || status.includes("Avert")) return { bg: "#FAEEDA", fg: "#854F0B" };
   return { bg: "#FCEBEB", fg: "#A32D2D" };
+}
+
+function getLoaderCategory(mass) {
+  if (!mass) return "—";
+  if (mass < 4300) return "FL3817";
+  if (mass < 5300) return "FL4121";
+  if (mass < 7000) return "FL4220";
+  if (mass < 9000) return "FL4621";
+  if (mass < 11000) return "FL4722";
+  return "FL5033";
+}
+
+function ToggleOption({ label, active, onToggle, children }) {
+  return (
+    <div style={{ marginBottom: 16 }}>
+      <div style={{ fontSize: 13, fontWeight: 500, color: "#333", marginBottom: 8 }}>{label}</div>
+      <div style={{ display: "flex", borderRadius: 10, overflow: "hidden", border: "1.5px solid #e0ddd8" }}>
+        <button onClick={() => onToggle(false)} style={{
+          flex: 1, padding: "10px 0", border: "none", fontSize: 13, cursor: "pointer",
+          background: !active ? "#1a1a18" : "#fafaf8",
+          color: !active ? "#fff" : "#aaa",
+          fontWeight: !active ? 600 : 400, transition: "all 0.18s",
+        }}>Désactiver</button>
+        <button onClick={() => onToggle(true)} style={{
+          flex: 1, padding: "10px 0", border: "none", fontSize: 13, cursor: "pointer",
+          background: active ? "#1a1a18" : "#fafaf8",
+          color: active ? "#fff" : "#aaa",
+          fontWeight: active ? 600 : 400, transition: "all 0.18s",
+          borderLeft: "1.5px solid #e0ddd8",
+        }}>Activer</button>
+      </div>
+      {active && (
+        <div style={{ marginTop: 2, padding: "12px 14px", background: "#f9f8f5", borderRadius: "0 0 10px 10px", border: "1.5px solid #e0ddd8", borderTop: "none" }}>
+          {children}
+        </div>
+      )}
+    </div>
+  );
 }
 
 function BrandBand({ brands, selected, onSelect }) {
@@ -377,6 +419,7 @@ export default function SimulateurStabilite() {
     water_ballast: false, wheel_weight_ARG: 0, wheel_weight_ARD: 0,
     front_ballast_mass: 0, front_ballast_offset: 0.5,
     rear_ballast_mass: 0, rear_ballast_offset: 0.3,
+    custom_tire: false,
   });
   const [env] = useState({ slope_lat: 0, slope_long: 0, speed: 0, turn_radius: 0, accel_long: 0 });
 
@@ -561,16 +604,9 @@ export default function SimulateurStabilite() {
       {/* OPTIONS */}
       <Section label={t.options}>
         <div style={{ padding: "16px 24px 20px" }}>
-          <div style={{ marginBottom: 16 }}>
-            <label style={{ fontSize: 13, color: "#555", display: "block", marginBottom: 6 }}>{t.rearTire}</label>
-            <select value={options.rear_tire} onChange={e => setOptions(o => ({ ...o, rear_tire: e.target.value }))}
-              style={{ width: "100%", padding: "9px 12px", borderRadius: 9, border: "1.5px solid #e0ddd8", fontSize: 13, background: "#fff" }}>
-              <option value="">—</option>
-              {allTires.map(ti => <option key={ti.reference} value={ti.reference}>{ti.reference} (⌀ {ti.diameter_mm} mm)</option>)}
-            </select>
-          </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 32px" }}>
+          {/* Sliders masse avant/arrière/roues — toujours visibles */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 32px", marginBottom: 20 }}>
             <div>
               <SliderField label={t.frontBallast} value={options.front_ballast_mass} max={2000} onChange={v => setOptions(o => ({ ...o, front_ballast_mass: v }))}/>
               <SliderField label={t.rearBallast} value={options.rear_ballast_mass} max={2000} onChange={v => setOptions(o => ({ ...o, rear_ballast_mass: v }))}/>
@@ -581,29 +617,56 @@ export default function SimulateurStabilite() {
             </div>
           </div>
 
-          <div style={{ display: "flex", gap: 24, marginBottom: 12 }}>
-            <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "#555", cursor: "pointer" }}>
-              <input type="checkbox" checked={options.water_ballast} onChange={e => setOptions(o => ({ ...o, water_ballast: e.target.checked }))}/> {t.waterBallast}
-            </label>
-            <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "#555", cursor: "pointer" }}>
-              <input type="checkbox" checked={options.loader_enabled} onChange={e => setOptions(o => ({ ...o, loader_enabled: e.target.checked }))}/> {t.loader}
-            </label>
-          </div>
+          {/* Pneu personnalisé */}
+          <ToggleOption
+            label={t.rearTire}
+            active={options.custom_tire}
+            onToggle={v => setOptions(o => ({ ...o, custom_tire: v, rear_tire: v ? o.rear_tire : (tractorList[tractorIdx]?.tire_defaults?.rear || "") }))}
+          >
+            <select value={options.rear_tire} onChange={e => setOptions(o => ({ ...o, rear_tire: e.target.value }))}
+              style={{ width: "100%", padding: "9px 12px", borderRadius: 9, border: "1.5px solid #e0ddd8", fontSize: 13, background: "#fff", marginTop: 10 }}>
+              <option value="">—</option>
+              {allTires.map(ti => <option key={ti.reference} value={ti.reference}>{ti.reference} (⌀ {ti.diameter_mm} mm)</option>)}
+            </select>
+          </ToggleOption>
 
-          {options.loader_enabled && (
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <span style={{ fontSize: 13, color: "#555" }}>{t.loaderPos}</span>
-              <div style={{ display: "flex", borderRadius: 8, overflow: "hidden", border: "1.5px solid #e0ddd8" }}>
-                {[["low", t.low], ["high", t.high]].map(([v, lbl]) => (
-                  <button key={v} onClick={() => setOptions(o => ({ ...o, loader_mode: v }))} style={{
-                    padding: "6px 14px", border: "none", fontSize: 12, cursor: "pointer",
-                    background: options.loader_mode === v ? "#1a1a18" : "#fafaf8",
-                    color: options.loader_mode === v ? "#fff" : "#888",
-                  }}>{lbl}</button>
-                ))}
+          {/* Lestage à l'eau */}
+          <ToggleOption
+            label={t.waterBallast}
+            active={options.water_ballast}
+            onToggle={v => setOptions(o => ({ ...o, water_ballast: v }))}
+          >
+            <div style={{ marginTop: 10, padding: "10px 14px", background: "#f0f8ff", borderRadius: 9, fontSize: 12, color: "#555" }}>
+              Remplissage automatique à 75% du volume des pneus AR avec mélange eau/antigel (0.754875 kg/L)
+            </div>
+          </ToggleOption>
+
+          {/* Chargeur frontal */}
+          <ToggleOption
+            label={t.loader}
+            active={options.loader_enabled}
+            onToggle={v => setOptions(o => ({ ...o, loader_enabled: v }))}
+          >
+            <div style={{ marginTop: 10 }}>
+              <div style={{ fontSize: 12, color: "#888", marginBottom: 8 }}>
+                {t.loaderSerie} : <strong style={{ color: "#1a1a18" }}>{getLoaderCategory(activeTractor?.mass)}</strong>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <span style={{ fontSize: 13, color: "#555" }}>{t.loaderPos}</span>
+                <div style={{ display: "flex", borderRadius: 8, overflow: "hidden", border: "1.5px solid #e0ddd8" }}>
+                  {[["low", t.low], ["high", t.high]].map(([v, lbl]) => (
+                    <button key={v} onClick={() => setOptions(o => ({ ...o, loader_mode: v }))} style={{
+                      padding: "6px 14px", border: "none", fontSize: 12, cursor: "pointer",
+                      background: options.loader_mode === v ? "#1a1a18" : "#fafaf8",
+                      color: options.loader_mode === v ? "#fff" : "#888",
+                      transition: "all 0.15s",
+                    }}>{lbl}</button>
+                  ))}
+                </div>
               </div>
             </div>
-          )}
+          </ToggleOption>
+
         </div>
       </Section>
 
