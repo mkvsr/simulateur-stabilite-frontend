@@ -8,34 +8,23 @@ function App() {
   const [status, setStatus] = useState("loading");
 
   useEffect(() => {
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      if (!session) return setStatus("auth");
-      await checkApproval(session.user.id);
-    });
-
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (!session) return setStatus("auth");
-      if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
-        await checkApproval(session.user.id);
+      if (!session) {
+        setStatus("auth");
+        return;
+      }
+      if (event === "INITIAL_SESSION" || event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("approved")
+          .eq("id", session.user.id)
+          .single();
+        setStatus(profile?.approved ? "approved" : "auth");
       }
     });
 
     return () => subscription.unsubscribe();
   }, []);
-
-  async function checkApproval(userId) {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("approved")
-      .eq("id", userId)
-      .single();
-
-    if (profile?.approved) {
-      setStatus("approved");
-    } else {
-      setStatus("auth");
-    }
-  }
 
   if (status === "loading") {
     return (
