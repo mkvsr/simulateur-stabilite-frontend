@@ -29,21 +29,48 @@ function App() {
   const [status, setStatus] = useState("loading");
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (!session) {
-        setStatus("auth");
-        return;
-      }
-      if (event === "INITIAL_SESSION" || event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
+    let mounted = true;
+
+    async function checkProfile(userId) {
+      try {
         const { data: profile } = await supabase
           .from("profiles")
           .select("approved")
-          .eq("id", session.user.id)
+          .eq("id", userId)
           .single();
-        setStatus(profile?.approved ? "approved" : "pending");
+        return profile?.approved ? "approved" : "pending";
+      } catch {
+        return "pending";
+      }
+    }
+
+    async function initAuth() {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!mounted) return;
+        if (!session) { setStatus("auth"); return; }
+        const s = await checkProfile(session.user.id);
+        if (mounted) setStatus(s);
+      } catch {
+        if (mounted) setStatus("auth");
+      }
+    }
+
+    // Fallback si tout échoue
+    const fallback = setTimeout(() => { if (mounted) setStatus("auth"); }, 6000);
+
+    initAuth().finally(() => clearTimeout(fallback));
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (!mounted) return;
+      if (event === "SIGNED_OUT") { setStatus("auth"); return; }
+      if (event === "SIGNED_IN" && session) {
+        const s = await checkProfile(session.user.id);
+        if (mounted) setStatus(s);
       }
     });
-    return () => subscription.unsubscribe();
+
+    return () => { mounted = false; clearTimeout(fallback); subscription.unsubscribe(); };
   }, []);
 
   if (status === "loading") return (
