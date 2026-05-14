@@ -420,7 +420,7 @@ export default function SimulateurStabilite() {
         if (res.ok) setResult(await res.json());
       } catch {}
       setComputing(false);
-    }, 800);
+    }, 400);
   }, [tractorList, tractorIdx, machineList, machineIdx, options, env]);
 
   useEffect(() => { triggerSimulate(); }, [triggerSimulate]);
