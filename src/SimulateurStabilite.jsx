@@ -52,6 +52,14 @@ const T = {
     frontPct: "Répart. AV",
     computing: "Calcul...", noResult: "Sélectionnez tracteur + machine",
     noMachineData: "Données à venir",
+    frontOffset: "Décalage masse avant (m)",
+    rearOffset: "Décalage masse arrière (m)",
+    environment: "Conditions environnementales",
+    slopeLat: "Pente latérale (°)",
+    slopeLong: "Pente longitudinale (°)",
+    speed: "Vitesse (m/s)",
+    accel: "Accélération longitudinale (m/s²)",
+    turnRadius: "Rayon de virage (m)",
   },
   en: {
     title: "Stability simulator",
@@ -84,6 +92,14 @@ const T = {
     frontPct: "Front dist.",
     computing: "Computing...", noResult: "Select tractor + machine",
     noMachineData: "Data coming soon",
+    frontOffset: "Front ballast offset (m)",
+    rearOffset: "Rear ballast offset (m)",
+    environment: "Environmental conditions",
+    slopeLat: "Lateral slope (°)",
+    slopeLong: "Long. slope (°)",
+    speed: "Speed (m/s)",
+    accel: "Long. acceleration (m/s²)",
+    turnRadius: "Turn radius (m)",
   }
 };
 
@@ -421,7 +437,7 @@ export default function SimulateurStabilite() {
     rear_ballast_mass: 0, rear_ballast_offset: 0.3,
     custom_tire: false,
   });
-  const [env] = useState({ slope_lat: 0, slope_long: 0, speed: 0, turn_radius: 0, accel_long: 0 });
+  const [env, setEnv] = useState({ slope_lat: 0, slope_long: 0, speed: 0, turn_radius: 0, accel_long: 0 });
 
   useEffect(() => {
     fetch(`${API_URL}/tractors`).then(r => r.json()).then(setAllTractors).catch(() => {});
@@ -609,7 +625,9 @@ export default function SimulateurStabilite() {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 32px", marginBottom: 20 }}>
             <div>
               <SliderField label={t.frontBallast} value={options.front_ballast_mass} max={2000} onChange={v => setOptions(o => ({ ...o, front_ballast_mass: v }))}/>
+              <SliderField label={t.frontOffset} value={options.front_ballast_offset} min={0.1} max={2} step={0.05} unit="m" onChange={v => setOptions(o => ({ ...o, front_ballast_offset: v }))}/>
               <SliderField label={t.rearBallast} value={options.rear_ballast_mass} max={2000} onChange={v => setOptions(o => ({ ...o, rear_ballast_mass: v }))}/>
+              <SliderField label={t.rearOffset} value={options.rear_ballast_offset} min={0.1} max={2} step={0.05} unit="m" onChange={v => setOptions(o => ({ ...o, rear_ballast_offset: v }))}/>
             </div>
             <div>
               <SliderField label={t.wheelARG} value={options.wheel_weight_ARG} max={800} step={25} onChange={v => setOptions(o => ({ ...o, wheel_weight_ARG: v }))}/>
@@ -670,57 +688,88 @@ export default function SimulateurStabilite() {
         </div>
       </Section>
 
-      {/* RÉSULTATS */}
+      {/* ENVIRONNEMENT */}
+      <Section label={t.environment}>
+        <div style={{ padding: "16px 24px 20px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 32px" }}>
+          <div>
+            <SliderField label={t.slopeLat} value={env.slope_lat} min={-30} max={30} step={0.5} unit="°" onChange={v => setEnv(e => ({ ...e, slope_lat: v }))}/>
+            <SliderField label={t.slopeLong} value={env.slope_long} min={-30} max={30} step={0.5} unit="°" onChange={v => setEnv(e => ({ ...e, slope_long: v }))}/>
+          </div>
+          <div>
+            <SliderField label={`${t.speed} (max ${(env.speed * 3.6).toFixed(1)} km/h)`} value={env.speed} min={0} max={11.1} step={0.1} unit="m/s" onChange={v => setEnv(e => ({ ...e, speed: v }))}/>
+            {env.speed > 0 && <div style={{ fontSize: 11, color: "#854F0B", marginTop: -10, marginBottom: 12 }}>{env.speed.toFixed(1)} m/s = {(env.speed * 3.6).toFixed(1)} km/h</div>}
+            <SliderField label={t.accel} value={env.accel_long} min={0} max={10} step={0.1} unit="m/s²" onChange={v => setEnv(e => ({ ...e, accel_long: v }))}/>
+            <SliderField label={t.turnRadius} value={env.turn_radius} min={0} max={50} step={0.5} unit="m" onChange={v => setEnv(e => ({ ...e, turn_radius: v }))}/>
+          </div>
+        </div>
+      </Section>
+
+      {/* RÉSULTATS — double colonne transport / travail */}
       {result && (
         <div style={{ padding: "20px 24px" }}>
           <div style={{ fontSize: 10, fontWeight: 600, color: "#aaa", textTransform: "uppercase", letterSpacing: 1, marginBottom: 16 }}>
-            {t.results} — {mode === "transport" ? t.transport : t.work}
+            {t.results}
           </div>
 
-          {/* Polygone */}
-          <div style={{ background: "#fff", borderRadius: 14, border: "1.5px solid #e5e1d8", padding: "16px 18px", marginBottom: 14 }}>
-            <div style={{ fontSize: 11, color: "#aaa", marginBottom: 8 }}>{t.polygon}</div>
-            <PolygonView result={result} mode={mode} tractorGeom={activeTractor}/>
-          </div>
-
-          {/* Jauges */}
-          {(() => {
-            const st = result[`static_${mode}`];
-            return st ? (
-              <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
-                <Gauge label={t.lateral} value={st.I_lat} danger={0.4} warn={0.5}/>
-                <Gauge label={t.longitudinal} value={st.I_long} danger={0.5} warn={0.6}/>
-                <Gauge label={t.global} value={st.I_static} danger={0.4} warn={0.5}/>
-              </div>
-            ) : null;
-          })()}
-
-          {/* Roues */}
-          <div style={{ background: "#fff", borderRadius: 14, border: "1.5px solid #e5e1d8", padding: "16px 18px", marginBottom: 14 }}>
-            <div style={{ fontSize: 11, color: "#aaa", marginBottom: 14 }}>{t.wheelLoads}</div>
-            <WheelGrid
-              loads={result[mode === "transport" ? "wheels_transport" : "wheels_work"]}
-              total={result[mode === "transport" ? "transport" : "work"]?.mass_total || 1}
-              t={t}/>
-          </div>
-
-          {/* Critères */}
-          <div style={{ background: "#fff", borderRadius: 14, border: "1.5px solid #e5e1d8", padding: "16px 18px" }}>
-            <div style={{ fontSize: 11, color: "#aaa", marginBottom: 10 }}>{t.criteria}</div>
-            {result.compatibility.map((c, i) => {
-              const { bg, fg } = statusColor(c.status);
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+            {["transport", "work"].map(m => {
+              const st = result[`static_${m}`];
+              const loads = result[m === "transport" ? "wheels_transport" : "wheels_work"];
+              const cg = result[m === "transport" ? "transport" : "work"];
               return (
-                <div key={i} style={{
-                  display: "flex", justifyContent: "space-between", alignItems: "center",
-                  padding: "8px 0", borderBottom: i < result.compatibility.length - 1 ? "0.5px solid #f0ece2" : "none",
-                }}>
-                  <span style={{ fontSize: 12, color: "#555" }}>{c.name}</span>
-                  <span style={{ fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 6, background: bg, color: fg }}>
-                    {c.status.includes("OK") ? "✓ OK" : c.status.includes("vert") || c.status.includes("Avert") ? "⚠" : "✗"}
-                  </span>
+                <div key={m}>
+                  {/* Titre mode */}
+                  <div style={{
+                    fontSize: 12, fontWeight: 700, color: "#fff", textAlign: "center",
+                    background: "#1a1a18", borderRadius: "10px 10px 0 0", padding: "8px 0",
+                  }}>
+                    {m === "transport" ? t.transport : t.work} — {Math.round(cg?.mass_total || 0).toLocaleString()} kg
+                  </div>
+
+                  {/* Polygone */}
+                  <div style={{ background: "#fff", border: "1.5px solid #e5e1d8", borderTop: "none", padding: "14px 16px" }}>
+                    <div style={{ fontSize: 10, color: "#aaa", marginBottom: 6 }}>{t.polygon}</div>
+                    <PolygonView result={result} mode={m} tractorGeom={activeTractor}/>
+                  </div>
+
+                  {/* Jauges */}
+                  {st && (
+                    <div style={{ display: "flex", gap: 6, margin: "8px 0" }}>
+                      <Gauge label={t.lateral} value={st.I_lat} danger={0.4} warn={0.5}/>
+                      <Gauge label={t.longitudinal} value={st.I_long} danger={0.5} warn={0.6}/>
+                      <Gauge label={t.global} value={st.I_static} danger={0.4} warn={0.5}/>
+                    </div>
+                  )}
+
+                  {/* Roues */}
+                  <div style={{ background: "#fff", borderRadius: 10, border: "1.5px solid #e5e1d8", padding: "14px 16px", marginBottom: 8 }}>
+                    <div style={{ fontSize: 10, color: "#aaa", marginBottom: 12 }}>{t.wheelLoads}</div>
+                    <WheelGrid loads={loads} total={cg?.mass_total || 1} t={t}/>
+                  </div>
                 </div>
               );
             })}
+          </div>
+
+          {/* Critères pleine largeur */}
+          <div style={{ background: "#fff", borderRadius: 14, border: "1.5px solid #e5e1d8", padding: "16px 18px", marginTop: 14 }}>
+            <div style={{ fontSize: 11, color: "#aaa", marginBottom: 10 }}>{t.criteria}</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 24px" }}>
+              {result.compatibility.map((c, i) => {
+                const { bg, fg } = statusColor(c.status);
+                return (
+                  <div key={i} style={{
+                    display: "flex", justifyContent: "space-between", alignItems: "center",
+                    padding: "7px 0", borderBottom: "0.5px solid #f0ece2",
+                  }}>
+                    <span style={{ fontSize: 12, color: "#555" }}>{c.name}</span>
+                    <span style={{ fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 6, background: bg, color: fg }}>
+                      {c.status.includes("OK") ? "✓ OK" : c.status.includes("vert") || c.status.includes("Avert") ? "⚠" : "✗"}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       )}
