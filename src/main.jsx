@@ -5,19 +5,26 @@ import Auth from "./Auth";
 import SimulateurStabilite from "./SimulateurStabilite";
 
 function PendingApproval() {
+  async function check() {
+    const { data } = await supabase.auth.refreshSession();
+    if (data?.session?.user?.app_metadata?.approved) window.location.reload();
+    else alert("Pas encore approuvé — réessayez plus tard.");
+  }
   return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#f1f5f9", fontFamily: "sans-serif" }}>
       <div style={{ background: "white", borderRadius: 12, padding: "40px 36px", width: 360, boxShadow: "0 4px 24px rgba(0,0,0,0.08)", textAlign: "center" }}>
         <h2 style={{ color: "#1e40af" }}>⏳ En attente d'approbation</h2>
         <p style={{ color: "#d97706", lineHeight: 1.6 }}>
-          Votre compte est en attente de validation par l'administrateur.<br /><br />
-          Vous recevrez un accès dès que votre compte sera approuvé.
+          Votre compte est en attente de validation.<br /><br />
+          Une fois approuvé, cliquez sur le bouton ci-dessous.
         </p>
         <br />
-        <button
-          style={{ width: "100%", padding: "11px 0", borderRadius: 7, border: "none", background: "#64748b", color: "white", fontWeight: 700, fontSize: 15, cursor: "pointer" }}
-          onClick={() => supabase.auth.signOut()}
-        >Se déconnecter</button>
+        <button onClick={check} style={{ width: "100%", padding: "11px 0", borderRadius: 7, border: "none", background: "#1e40af", color: "white", fontWeight: 700, fontSize: 15, cursor: "pointer", marginBottom: 10 }}>
+          Vérifier mon accès
+        </button>
+        <button onClick={() => supabase.auth.signOut()} style={{ width: "100%", padding: "11px 0", borderRadius: 7, border: "none", background: "#64748b", color: "white", fontWeight: 700, fontSize: 15, cursor: "pointer" }}>
+          Se déconnecter
+        </button>
       </div>
     </div>
   );
@@ -29,43 +36,33 @@ function App() {
   useEffect(() => {
     let mounted = true;
 
-    async function checkProfile(userId) {
-      try {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("approved")
-          .eq("id", userId)
-          .single();
-        return profile?.approved ? "approved" : "pending";
-      } catch {
-        return "pending";
-      }
+    function fromSession(session) {
+      return session?.user?.app_metadata?.approved === true ? "approved" : "pending";
     }
 
     async function initAuth() {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data } = await supabase.auth.refreshSession();
         if (!mounted) return;
-        if (!session) { setStatus("auth"); return; }
-        const s = await checkProfile(session.user.id);
-        if (mounted) setStatus(s);
+        if (!data?.session) {
+          const { data: d2 } = await supabase.auth.getSession();
+          setStatus(d2?.session ? fromSession(d2.session) : "auth");
+          return;
+        }
+        setStatus(fromSession(data.session));
       } catch {
         if (mounted) setStatus("auth");
       }
     }
 
-    const fallback = setTimeout(() => { if (mounted) setStatus("auth"); }, 6000);
+    const fallback = setTimeout(() => { if (mounted) setStatus("auth"); }, 8000);
     initAuth().finally(() => clearTimeout(fallback));
 
-    // Listener NON-async : évite que signInWithPassword attende la requête profiles
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (!mounted) return;
-      if (event === "SIGNED_OUT" || !session) {
-        setStatus("auth");
-        return;
-      }
-      if (event === "SIGNED_IN") {
-        checkProfile(session.user.id).then(s => { if (mounted) setStatus(s); });
+      if (event === "SIGNED_OUT" || !session) { setStatus("auth"); return; }
+      if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
+        setStatus(fromSession(session));
       }
     });
 
@@ -83,7 +80,5 @@ function App() {
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <React.StrictMode><App /></React.StrictMode>
 );
