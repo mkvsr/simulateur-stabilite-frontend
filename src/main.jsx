@@ -17,9 +17,7 @@ function PendingApproval() {
         <button
           style={{ width: "100%", padding: "11px 0", borderRadius: 7, border: "none", background: "#64748b", color: "white", fontWeight: 700, fontSize: 15, cursor: "pointer" }}
           onClick={() => supabase.auth.signOut()}
-        >
-          Se déconnecter
-        </button>
+        >Se déconnecter</button>
       </div>
     </div>
   );
@@ -56,17 +54,18 @@ function App() {
       }
     }
 
-    // Fallback si tout échoue
     const fallback = setTimeout(() => { if (mounted) setStatus("auth"); }, 6000);
-
     initAuth().finally(() => clearTimeout(fallback));
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    // Listener NON-async : évite que signInWithPassword attende la requête profiles
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (!mounted) return;
-      if (event === "SIGNED_OUT") { setStatus("auth"); return; }
-      if (event === "SIGNED_IN" && session) {
-        const s = await checkProfile(session.user.id);
-        if (mounted) setStatus(s);
+      if (event === "SIGNED_OUT" || !session) {
+        setStatus("auth");
+        return;
+      }
+      if (event === "SIGNED_IN") {
+        checkProfile(session.user.id).then(s => { if (mounted) setStatus(s); });
       }
     });
 
