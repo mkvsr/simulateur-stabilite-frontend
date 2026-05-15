@@ -597,7 +597,7 @@ export default function SimulateurStabilite() {
 
             {/* Flèche gauche — à gauche du tracteur */}
             <button onClick={() => setTractorIdx(i => Math.max(0, i - 1))} disabled={tractorIdx === 0} style={{
-              position: "absolute", right: "44%", top: "55%", transform: "translateY(-50%)",
+              position: "absolute", left: "37%", top: "55%", transform: "translateY(-50%)",
               width: 42, height: 42, borderRadius: "50%", border: "none",
               background: tractorIdx === 0 ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.85)",
               cursor: tractorIdx === 0 ? "not-allowed" : "pointer",
