@@ -590,7 +590,7 @@ export default function SimulateurStabilite() {
               </div>
 
               {/* Image tracteur PNG transparent — positionnée à droite, taille proportionnelle */}
-              <div style={{ position: "absolute", right: "5%", top: "50%", transform: "translateY(-50%)", zIndex: 2, height: "85%", display: "flex", alignItems: "center" }}>
+              <div style={{ position: "absolute", right: "5%", top: "55%", transform: "translateY(-50%)", zIndex: 2, height: "85%", display: "flex", alignItems: "center" }}>
                 {activeTractor && (
                   <TractorImage
                     tractorKey={activeTractor.key}
