@@ -191,7 +191,7 @@ function BrandBand({ brands, selected, onSelect }) {
   );
 }
 
-function TractorImage({ tractorKey, color }) {
+function TractorImage({ tractorKey, color, style = {} }) {
   const [hasImage, setHasImage] = useState(true);
   if (hasImage) {
     return (
@@ -199,7 +199,7 @@ function TractorImage({ tractorKey, color }) {
         src={`/tractors/${tractorKey}.png`}
         alt={tractorKey}
         onError={() => setHasImage(false)}
-        style={{ width: "100%", height: 160, objectFit: "contain", display: "block" }}
+        style={{ height: 220, width: "auto", maxWidth: "100%", objectFit: "contain", display: "block", ...style }}
       />
     );
   }
@@ -547,56 +547,82 @@ export default function SimulateurStabilite() {
         <Section label={t.tractorModel} bg="#fff">
           {tractorList.length > 0 ? (
           <div style={{
-            padding: "16px 24px 20px",
+            position: "relative",
             backgroundImage: `url(/brands/${tractorBrand}.png)`,
             backgroundSize: "cover",
             backgroundPosition: "center",
-            position: "relative",
+            minHeight: 280,
+            overflow: "hidden",
           }}>
-            {/* Overlay léger pour lisibilité */}
-            <div style={{
-              position: "absolute", inset: 0,
-              background: "rgba(255,255,255,0.75)",
-              backdropFilter: "blur(2px)",
-            }}/>
-            <div style={{ position: "relative", display: "flex", alignItems: "flex-start", gap: 20 }}>
-            <button onClick={() => setTractorIdx(i => Math.max(0, i - 1))} disabled={tractorIdx === 0} style={{
-              width: 38, height: 38, borderRadius: 9, border: "1.5px solid #e5e1d8",
-              background: "#fafaf8", cursor: tractorIdx === 0 ? "not-allowed" : "pointer",
-              fontSize: 20, color: tractorIdx === 0 ? "#ddd" : "#444",
-              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 60,
-            }}>‹</button>
+            {/* Overlay léger */}
+            <div style={{ position: "absolute", inset: 0, background: "rgba(255,255,255,0.55)" }}/>
 
-            <div style={{ flex: 1 }}>
-              {activeTractor && (
-                <>
-                  <div style={{ borderRadius: 12, overflow: "hidden", background: `${tractorColor}06`, border: `1.5px solid ${tractorColor}20` }}>
-                    <TractorImage tractorKey={activeTractor.key} color={tractorColor}/>
+            {/* Contenu */}
+            <div style={{ position: "relative", display: "flex", alignItems: "center", padding: "20px 24px" }}>
+
+              {/* Flèche gauche */}
+              <button onClick={() => setTractorIdx(i => Math.max(0, i - 1))} disabled={tractorIdx === 0} style={{
+                width: 38, height: 38, borderRadius: 9, border: "1.5px solid #e5e1d8",
+                background: "rgba(255,255,255,0.8)", cursor: tractorIdx === 0 ? "not-allowed" : "pointer",
+                fontSize: 20, color: tractorIdx === 0 ? "#ddd" : "#444",
+                display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, zIndex: 2,
+              }}>‹</button>
+
+              {/* Infos à gauche */}
+              <div style={{ flex: "0 0 220px", padding: "0 24px", zIndex: 2 }}>
+                <div style={{ fontSize: 20, fontWeight: 700, color: "#1a1a18", marginBottom: 16 }}>
+                  {activeTractor?.name}
+                </div>
+                {activeTractor && (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    {[
+                      [t.mass, `${activeTractor.mass?.toLocaleString()} kg`],
+                      [t.frontPct, `${activeTractor.mass_front_pct}% AV`],
+                      [t.wheelbase, `${activeTractor.wheelbase?.toFixed(3)} m`],
+                      [t.trackRear, `${activeTractor.track_rear?.toFixed(2)} m`],
+                      ["Pneu", activeTractor.tire_defaults?.rear || "—"],
+                    ].map(([lbl, val]) => (
+                      <div key={lbl}>
+                        <div style={{ fontSize: 10, color: "#888" }}>{lbl}</div>
+                        <div style={{ fontSize: 13, fontWeight: 500, color: "#1a1a18" }}>{val}</div>
+                      </div>
+                    ))}
                   </div>
-                  <div style={{ textAlign: "center", marginTop: 12, marginBottom: 4 }}>
-                    <div style={{ fontSize: 18, fontWeight: 700, color: "#1a1a18" }}>{activeTractor.name}</div>
-                  </div>
-                  <InfoGrid items={[
-                    [t.mass, `${activeTractor.mass?.toLocaleString()} kg`],
-                    [t.frontPct, `${activeTractor.mass_front_pct}% AV`],
-                    [t.wheelbase, `${activeTractor.wheelbase?.toFixed(3)} m`],
-                    [t.trackFront, `${activeTractor.track_front?.toFixed(2)} m`],
-                    [t.trackRear, `${activeTractor.track_rear?.toFixed(2)} m`],
-                    ["Pneu défaut", activeTractor.tire_defaults?.rear || "—"],
-                  ]}/>
-                  <Dots total={tractorList.length} current={tractorIdx} onSelect={setTractorIdx} color={tractorColor}/>
-                </>
-              )}
+                )}
+              </div>
+
+              {/* Image tracteur — grande, à droite */}
+              <div style={{ flex: 1, display: "flex", justifyContent: "flex-end", zIndex: 2 }}>
+                {activeTractor && (
+                  <TractorImage
+                    tractorKey={activeTractor.key}
+                    color={tractorColor}
+                    style={{ height: 220, width: "auto", maxWidth: "70%", objectFit: "contain" }}
+                  />
+                )}
+              </div>
+
+              {/* Flèche droite */}
+              <button onClick={() => setTractorIdx(i => Math.min(tractorList.length - 1, i + 1))} disabled={tractorIdx === tractorList.length - 1} style={{
+                width: 38, height: 38, borderRadius: 9, border: "1.5px solid #e5e1d8",
+                background: "rgba(255,255,255,0.8)", cursor: tractorIdx === tractorList.length - 1 ? "not-allowed" : "pointer",
+                fontSize: 20, color: tractorIdx === tractorList.length - 1 ? "#ddd" : "#444",
+                display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, zIndex: 2,
+              }}>›</button>
             </div>
 
-            <button onClick={() => setTractorIdx(i => Math.min(tractorList.length - 1, i + 1))} disabled={tractorIdx === tractorList.length - 1} style={{
-              width: 38, height: 38, borderRadius: 9, border: "1.5px solid #e5e1d8",
-              background: "#fafaf8", cursor: tractorIdx === tractorList.length - 1 ? "not-allowed" : "pointer",
-              fontSize: 20, color: tractorIdx === tractorList.length - 1 ? "#ddd" : "#444",
-              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 60,
-            }}>›</button>
+            {/* Dots */}
+            <div style={{ position: "relative", zIndex: 2, paddingBottom: 16 }}>
+              <Dots total={tractorList.length} current={tractorIdx} onSelect={setTractorIdx} color={tractorColor}/>
+            </div>
           </div>
-          </div>
+          ) : (
+            <div style={{ padding: "30px 24px", textAlign: "center", color: "#bbb", fontSize: 13, fontStyle: "italic" }}>
+              {t.noMachineData} — {tractorBrand}
+            </div>
+          )}
+        </Section>
+      )}
           ) : (
             <div style={{ padding: "30px 24px", textAlign: "center", color: "#bbb", fontSize: 13, fontStyle: "italic" }}>
               {t.noMachineData} — {tractorBrand}
