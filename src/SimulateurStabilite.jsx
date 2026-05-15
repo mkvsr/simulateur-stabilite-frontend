@@ -623,13 +623,6 @@ export default function SimulateurStabilite() {
           )}
         </Section>
       )}
-          ) : (
-            <div style={{ padding: "30px 24px", textAlign: "center", color: "#bbb", fontSize: 13, fontStyle: "italic" }}>
-              {t.noMachineData} — {tractorBrand}
-            </div>
-          )}
-        </Section>
-      )}
 
       {/* MARQUES MACHINE */}
       <div style={{ borderBottom: "1.5px solid #e5e1d8" }}>
