@@ -207,6 +207,8 @@ function TractorImage({ tractorKey, color }) {
   }
   return <TractorSVG color={color}/>;
 }
+ 
+function TractorSVG({ color }) {
   return (
     <svg width="100%" height="160" viewBox="0 0 360 160" fill="none">
       <rect x="90" y="50" width="180" height="80" rx="10" fill={color} opacity=".1"/>
