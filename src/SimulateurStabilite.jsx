@@ -566,26 +566,40 @@ export default function SimulateurStabilite() {
                 display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, zIndex: 2,
               }}>‹</button>
 
-              {/* Infos à gauche */}
-              <div style={{ flex: "0 0 200px", padding: "0 20px", zIndex: 2 }}>
-                <div style={{ fontSize: 18, fontWeight: 700, color: "#1a1a18", marginBottom: 12 }}>
-                  {activeTractor?.name}
-                </div>
+              {/* Widget infos à gauche */}
+              <div style={{
+                flex: "0 0 220px", marginLeft: 8, zIndex: 2,
+                background: "rgba(255,255,255,0.82)",
+                backdropFilter: "blur(6px)",
+                borderRadius: 12,
+                padding: "14px 16px",
+                border: "1px solid rgba(255,255,255,0.9)",
+                boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
+              }}>
                 {activeTractor && (
-                  <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                    {[
-                      [t.mass, `${activeTractor.mass?.toLocaleString()} kg`],
-                      [t.frontPct, `${activeTractor.mass_front_pct}% AV`],
-                      [t.wheelbase, `${activeTractor.wheelbase?.toFixed(3)} m`],
-                      [t.trackRear, `${activeTractor.track_rear?.toFixed(2)} m`],
-                      ["Pneu", activeTractor.tire_defaults?.rear || "—"],
-                    ].map(([lbl, val]) => (
-                      <div key={lbl}>
-                        <div style={{ fontSize: 10, color: "#666" }}>{lbl}</div>
-                        <div style={{ fontSize: 13, fontWeight: 500, color: "#1a1a18" }}>{val}</div>
-                      </div>
-                    ))}
-                  </div>
+                  <>
+                    <div style={{ marginBottom: 10, borderBottom: `2px solid ${tractorColor}`, paddingBottom: 8 }}>
+                      <div style={{ fontSize: 10, color: "#888", textTransform: "uppercase", letterSpacing: 0.5 }}>{activeTractor.brand}</div>
+                      <div style={{ fontSize: 15, fontWeight: 700, color: "#1a1a18", lineHeight: 1.2 }}>{activeTractor.model || activeTractor.name?.replace(activeTractor.brand + " ", "")}</div>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                      {[
+                        ["Masse à vide", `${activeTractor.mass?.toLocaleString()} kg`],
+                        ["Répartition", `${activeTractor.mass_front_pct}% AV / ${activeTractor.mass_rear_pct}% AR`],
+                        ["PTAC", activeTractor.ptac ? `${activeTractor.ptac?.toLocaleString()} kg` : "—"],
+                        ["Empattement", `${activeTractor.wheelbase?.toFixed(3)} m`],
+                        ["Voie AR", `${activeTractor.track_rear?.toFixed(2)} m`],
+                        ["Pneu AV", activeTractor.tire_defaults?.front || "—"],
+                        ["Pneu AR", activeTractor.tire_defaults?.rear || "—"],
+                        ["Vitesse max", activeTractor.dynamics?.max_speed_kmh ? `${activeTractor.dynamics.max_speed_kmh} km/h` : "—"],
+                      ].map(([lbl, val]) => (
+                        <div key={lbl} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
+                          <span style={{ fontSize: 10, color: "#888", flexShrink: 0 }}>{lbl}</span>
+                          <span style={{ fontSize: 11, fontWeight: 600, color: "#1a1a18", textAlign: "right" }}>{val}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
                 )}
               </div>
 
