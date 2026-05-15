@@ -173,8 +173,6 @@ function BrandBand({ brands, selected, onSelect }) {
             background: active ? color + "22" : "transparent",
             borderBottom: active ? `3px solid ${color}` : "3px solid transparent",
             transition: "all 0.18s", flexShrink: 0,
-            backgroundImage: active ? `url(/brands/${key}.png)` : "none",
-            backgroundSize: "cover", backgroundPosition: "center",
           }}>
             <div style={{
               width: 36, height: 36, borderRadius: 8,
@@ -183,7 +181,7 @@ function BrandBand({ brands, selected, onSelect }) {
               fontWeight: 700, fontSize: 12, color: active ? "#fff" : "#666",
               transition: "all 0.18s",
             }}>{initials(key)}</div>
-            <span style={{ fontSize: 9, color: active ? "#fff" : "#555", fontWeight: active ? 600 : 400, whiteSpace: "nowrap", textShadow: active ? "0 1px 3px #000" : "none" }}>
+            <span style={{ fontSize: 9, color: active ? color : "#555", fontWeight: active ? 600 : 400, whiteSpace: "nowrap" }}>
               {key}
             </span>
           </button>
@@ -548,7 +546,20 @@ export default function SimulateurStabilite() {
       {tractorBrand && (
         <Section label={t.tractorModel} bg="#fff">
           {tractorList.length > 0 ? (
-          <div style={{ padding: "16px 24px 20px", display: "flex", alignItems: "flex-start", gap: 20 }}>
+          <div style={{
+            padding: "16px 24px 20px",
+            backgroundImage: `url(/brands/${tractorBrand}.png)`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            position: "relative",
+          }}>
+            {/* Overlay léger pour lisibilité */}
+            <div style={{
+              position: "absolute", inset: 0,
+              background: "rgba(255,255,255,0.75)",
+              backdropFilter: "blur(2px)",
+            }}/>
+            <div style={{ position: "relative", display: "flex", alignItems: "flex-start", gap: 20 }}>
             <button onClick={() => setTractorIdx(i => Math.max(0, i - 1))} disabled={tractorIdx === 0} style={{
               width: 38, height: 38, borderRadius: 9, border: "1.5px solid #e5e1d8",
               background: "#fafaf8", cursor: tractorIdx === 0 ? "not-allowed" : "pointer",
@@ -584,7 +595,8 @@ export default function SimulateurStabilite() {
               fontSize: 20, color: tractorIdx === tractorList.length - 1 ? "#ddd" : "#444",
               display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 60,
             }}>›</button>
-          </div>
+            </div> {/* fin relative */}
+          </div> {/* fin fond marque */}
           ) : (
             <div style={{ padding: "30px 24px", textAlign: "center", color: "#bbb", fontSize: 13, fontStyle: "italic" }}>
               {t.noMachineData} — {tractorBrand}
