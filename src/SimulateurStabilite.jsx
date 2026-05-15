@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
- 
+
 const API_URL = "https://simulateur-stabilite-maneko.onrender.com";
- 
+
 const TRACTOR_BRANDS = [
   { key: "Case", color: "#D2232A" },
   { key: "Claas", color: "#8DC63F" },
@@ -15,14 +15,14 @@ const TRACTOR_BRANDS = [
   { key: "Renault", color: "#EFDF00" },
   { key: "Valtra", color: "#B40000" },
 ];
- 
+
 const MACHINE_BRANDS = [
   { key: "Noremat", color: "#1A5276" },
   { key: "Kuhn", color: "#E74C3C" },
   { key: "Rousseau", color: "#2E86C1" },
   { key: "SMA", color: "#1E8449" },
 ];
- 
+
 const T = {
   fr: {
     title: "Simulateur de stabilité",
@@ -105,24 +105,24 @@ const T = {
     turnRadius: "Turn radius (m)",
   }
 };
- 
+
 function initials(name) {
   return name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
 }
- 
+
 function indexColor(v, danger, warn) {
   if (v < 0 || v < danger) return "#A32D2D";
   if (v < warn) return "#854F0B";
   return "#3B6D11";
 }
- 
+
 function statusColor(status) {
   if (!status) return { bg: "#f0f0f0", fg: "#888" };
   if (status.includes("OK")) return { bg: "#EAF3DE", fg: "#3B6D11" };
   if (status.includes("vert") || status.includes("Avert")) return { bg: "#FAEEDA", fg: "#854F0B" };
   return { bg: "#FCEBEB", fg: "#A32D2D" };
 }
- 
+
 function getLoaderCategory(mass) {
   if (!mass) return "—";
   if (mass < 4300) return "FL3817";
@@ -132,7 +132,7 @@ function getLoaderCategory(mass) {
   if (mass < 11000) return "FL4722";
   return "FL5033";
 }
- 
+
 function ToggleOption({ label, active, onToggle, children }) {
   return (
     <div style={{ marginBottom: 16 }}>
@@ -160,7 +160,7 @@ function ToggleOption({ label, active, onToggle, children }) {
     </div>
   );
 }
- 
+
 function BrandBand({ brands, selected, onSelect }) {
   return (
     <div style={{ display: "flex", overflowX: "auto", background: "#1a1a18", padding: "0 8px" }}>
@@ -192,7 +192,7 @@ function BrandBand({ brands, selected, onSelect }) {
     </div>
   );
 }
- 
+
 function TractorImage({ tractorKey, color }) {
   const [hasImage, setHasImage] = useState(true);
   if (hasImage) {
@@ -207,7 +207,7 @@ function TractorImage({ tractorKey, color }) {
   }
   return <TractorSVG color={color}/>;
 }
- 
+
 function TractorSVG({ color }) {
   return (
     <svg width="100%" height="160" viewBox="0 0 360 160" fill="none">
@@ -225,7 +225,7 @@ function TractorSVG({ color }) {
     </svg>
   );
 }
- 
+
 function MachineSVG({ color }) {
   return (
     <svg width="100%" height="160" viewBox="0 0 360 160" fill="none">
@@ -241,7 +241,7 @@ function MachineSVG({ color }) {
     </svg>
   );
 }
- 
+
 function InfoGrid({ items }) {
   return (
     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(110px, 1fr))", gap: "10px 20px", padding: "14px 0 4px" }}>
@@ -254,7 +254,7 @@ function InfoGrid({ items }) {
     </div>
   );
 }
- 
+
 function Dots({ total, current, onSelect, color }) {
   if (total <= 1) return null;
   return (
@@ -270,7 +270,7 @@ function Dots({ total, current, onSelect, color }) {
     </div>
   );
 }
- 
+
 function SliderField({ label, value, onChange, min = 0, max, step = 50, unit = "kg" }) {
   return (
     <div style={{ marginBottom: 16 }}>
@@ -288,7 +288,7 @@ function SliderField({ label, value, onChange, min = 0, max, step = 50, unit = "
     </div>
   );
 }
- 
+
 function Gauge({ label, value, danger, warn }) {
   const pct = Math.max(0, Math.min(1, value));
   const color = indexColor(value, danger, warn);
@@ -303,7 +303,7 @@ function Gauge({ label, value, danger, warn }) {
     </div>
   );
 }
- 
+
 function WheelGrid({ loads, total, t }) {
   const { FL, FR, RL, RR } = loads;
   const wc = v => (v / total) > 0.4 ? "#A32D2D" : (v / total) > 0.35 ? "#854F0B" : "#3B6D11";
@@ -335,7 +335,7 @@ function WheelGrid({ loads, total, t }) {
     </div>
   );
 }
- 
+
 function PolygonView({ result, mode, tractorGeom }) {
   if (!result || !tractorGeom) return null;
   const W = 360, H = 200, PAD = 44;
@@ -372,7 +372,7 @@ function PolygonView({ result, mode, tractorGeom }) {
     </svg>
   );
 }
- 
+
 function StickyBar({ result, mode, t, onModeChange }) {
   const st = result ? result[`static_${mode}`] : null;
   const cg = result ? result[mode === "transport" ? "transport" : "work"] : null;
@@ -394,14 +394,14 @@ function StickyBar({ result, mode, t, onModeChange }) {
           </button>
         ))}
       </div>
- 
+
       {cg && (
         <div style={{ flexShrink: 0 }}>
           <span style={{ fontSize: 10, color: "#555" }}>{t.totalMass} </span>
           <span style={{ fontSize: 17, fontWeight: 700, color: "#fff" }}>{Math.round(cg.mass_total).toLocaleString()} kg</span>
         </div>
       )}
- 
+
       {st && (
         <div style={{ display: "flex", gap: 16, flex: 1, flexWrap: "wrap" }}>
           {[[t.lateral, st.I_lat, 0.4, 0.5],[t.longitudinal, st.I_long, 0.5, 0.6],[t.global, st.I_static, 0.4, 0.5]].map(([lbl, val, d, w]) => {
@@ -416,9 +416,9 @@ function StickyBar({ result, mode, t, onModeChange }) {
           })}
         </div>
       )}
- 
+
       {!result && <span style={{ fontSize: 12, color: "#555", flex: 1 }}>{t.noResult}</span>}
- 
+
       {result && (
         <div style={{ display: "flex", gap: 5, flexShrink: 0 }}>
           {result.compatibility.map((c, i) => {
@@ -431,9 +431,9 @@ function StickyBar({ result, mode, t, onModeChange }) {
     </div>
   );
 }
- 
+
 // ── App ────────────────────────────────────────────────────────────────────
- 
+
 export default function SimulateurStabilite() {
   const [lang, setLang] = useState("fr");
   const t = T[lang];
@@ -458,13 +458,13 @@ export default function SimulateurStabilite() {
     custom_tire: false,
   });
   const [env, setEnv] = useState({ slope_lat: 0, slope_long: 0, speed: 0, turn_radius: 0, accel_long: 0 });
- 
+
   useEffect(() => {
     fetch(`${API_URL}/tractors`).then(r => r.json()).then(setAllTractors).catch(() => {});
     fetch(`${API_URL}/machines`).then(r => r.json()).then(setAllMachines).catch(() => {});
     fetch(`${API_URL}/tires`).then(r => r.json()).then(setAllTires).catch(() => {});
   }, []);
- 
+
   useEffect(() => {
     if (!tractorBrand) return;
     const list = allTractors.filter(tr => tr.brand === tractorBrand);
@@ -472,17 +472,17 @@ export default function SimulateurStabilite() {
     setTractorIdx(0);
     if (list[0]) setOptions(o => ({ ...o, rear_tire: list[0].tire_defaults?.rear || "" }));
   }, [tractorBrand, allTractors]);
- 
+
   useEffect(() => {
     const tr = tractorList[tractorIdx];
     if (tr) setOptions(o => ({ ...o, rear_tire: tr.tire_defaults?.rear || o.rear_tire }));
   }, [tractorIdx, tractorList]);
- 
+
   useEffect(() => {
     setMachineList(machineBrand === "Noremat" ? allMachines : []);
     setMachineIdx(0);
   }, [machineBrand, allMachines]);
- 
+
   const triggerSimulate = useCallback(() => {
     const tractor = tractorList[tractorIdx];
     const machine = machineList[machineIdx];
@@ -501,14 +501,14 @@ export default function SimulateurStabilite() {
       setComputing(false);
     }, 400);
   }, [tractorList, tractorIdx, machineList, machineIdx, options, env]);
- 
+
   useEffect(() => { triggerSimulate(); }, [triggerSimulate]);
- 
+
   const activeTractor = tractorList[tractorIdx];
   const activeMachine = machineList[machineIdx];
   const tractorColor = TRACTOR_BRANDS.find(b => b.key === tractorBrand)?.color || "#3B6D11";
   const machineColor = MACHINE_BRANDS.find(b => b.key === machineBrand)?.color || "#1A5276";
- 
+
   const Section = ({ label, children, bg = "#fff" }) => (
     <div style={{ background: bg, borderBottom: "1.5px solid #e5e1d8" }}>
       <div style={{ padding: "10px 24px 0", fontSize: 10, fontWeight: 600, color: "#aaa", textTransform: "uppercase", letterSpacing: 1 }}>
@@ -517,10 +517,10 @@ export default function SimulateurStabilite() {
       {children}
     </div>
   );
- 
+
   return (
     <div style={{ background: "#f5f3ee", minHeight: "100vh", paddingBottom: 80 }}>
- 
+
       {/* HEADER */}
       <div style={{ background: "#1a1a18", padding: "12px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div>
@@ -535,7 +535,7 @@ export default function SimulateurStabilite() {
           }}>{lang === "fr" ? "EN" : "FR"}</button>
         </div>
       </div>
- 
+
       {/* MARQUES TRACTEUR */}
       <div style={{ borderBottom: "1.5px solid #e5e1d8" }}>
         <div style={{ padding: "10px 20px 0", fontSize: 10, fontWeight: 600, color: "#aaa", textTransform: "uppercase", letterSpacing: 1, background: "#1a1a18" }}>
@@ -543,7 +543,7 @@ export default function SimulateurStabilite() {
         </div>
         <BrandBand brands={TRACTOR_BRANDS} selected={tractorBrand} onSelect={setTractorBrand}/>
       </div>
- 
+
       {/* MODÈLE TRACTEUR */}
       {tractorBrand && (
         <Section label={t.tractorModel} bg="#fff">
@@ -555,7 +555,7 @@ export default function SimulateurStabilite() {
               fontSize: 20, color: tractorIdx === 0 ? "#ddd" : "#444",
               display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 60,
             }}>‹</button>
- 
+
             <div style={{ flex: 1 }}>
               {activeTractor && (
                 <>
@@ -577,7 +577,7 @@ export default function SimulateurStabilite() {
                 </>
               )}
             </div>
- 
+
             <button onClick={() => setTractorIdx(i => Math.min(tractorList.length - 1, i + 1))} disabled={tractorIdx === tractorList.length - 1} style={{
               width: 38, height: 38, borderRadius: 9, border: "1.5px solid #e5e1d8",
               background: "#fafaf8", cursor: tractorIdx === tractorList.length - 1 ? "not-allowed" : "pointer",
@@ -592,7 +592,7 @@ export default function SimulateurStabilite() {
           )}
         </Section>
       )}
- 
+
       {/* MARQUES MACHINE */}
       <div style={{ borderBottom: "1.5px solid #e5e1d8" }}>
         <div style={{ padding: "10px 20px 0", fontSize: 10, fontWeight: 600, color: "#aaa", textTransform: "uppercase", letterSpacing: 1, background: "#1a1a18" }}>
@@ -600,7 +600,7 @@ export default function SimulateurStabilite() {
         </div>
         <BrandBand brands={MACHINE_BRANDS} selected={machineBrand} onSelect={setMachineBrand}/>
       </div>
- 
+
       {/* MODÈLE MACHINE */}
       <Section label={t.machineModel} bg="#fff">
         {machineList.length > 0 ? (
@@ -611,7 +611,7 @@ export default function SimulateurStabilite() {
               fontSize: 20, color: machineIdx === 0 ? "#ddd" : "#444",
               display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 60,
             }}>‹</button>
- 
+
             <div style={{ flex: 1 }}>
               {activeMachine && (
                 <>
@@ -628,7 +628,7 @@ export default function SimulateurStabilite() {
                 </>
               )}
             </div>
- 
+
             <button onClick={() => setMachineIdx(i => Math.min(machineList.length - 1, i + 1))} disabled={machineIdx === machineList.length - 1} style={{
               width: 38, height: 38, borderRadius: 9, border: "1.5px solid #e5e1d8",
               background: "#fafaf8", cursor: machineIdx === machineList.length - 1 ? "not-allowed" : "pointer",
@@ -642,11 +642,11 @@ export default function SimulateurStabilite() {
           </div>
         )}
       </Section>
- 
+
       {/* OPTIONS */}
       <Section label={t.options}>
         <div style={{ padding: "16px 24px 20px" }}>
- 
+
           {/* Sliders masse avant/arrière/roues — toujours visibles */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 32px", marginBottom: 20 }}>
             <div>
@@ -660,7 +660,7 @@ export default function SimulateurStabilite() {
               <SliderField label={t.wheelARD} value={options.wheel_weight_ARD} max={800} step={25} onChange={v => setOptions(o => ({ ...o, wheel_weight_ARD: v }))}/>
             </div>
           </div>
- 
+
           {/* Pneu personnalisé */}
           <ToggleOption
             label={t.rearTire}
@@ -673,7 +673,7 @@ export default function SimulateurStabilite() {
               {allTires.map(ti => <option key={ti.reference} value={ti.reference}>{ti.reference} (⌀ {ti.diameter_mm} mm)</option>)}
             </select>
           </ToggleOption>
- 
+
           {/* Lestage à l'eau */}
           <ToggleOption
             label={t.waterBallast}
@@ -684,7 +684,7 @@ export default function SimulateurStabilite() {
               Remplissage automatique à 75% du volume des pneus AR avec mélange eau/antigel (0.754875 kg/L)
             </div>
           </ToggleOption>
- 
+
           {/* Chargeur frontal */}
           <ToggleOption
             label={t.loader}
@@ -710,10 +710,10 @@ export default function SimulateurStabilite() {
               </div>
             </div>
           </ToggleOption>
- 
+
         </div>
       </Section>
- 
+
       {/* ENVIRONNEMENT */}
       <Section label={t.environment}>
         <div style={{ padding: "16px 24px 20px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 32px" }}>
@@ -729,14 +729,14 @@ export default function SimulateurStabilite() {
           </div>
         </div>
       </Section>
- 
+
       {/* RÉSULTATS — double colonne transport / travail */}
       {result && (
         <div style={{ padding: "20px 24px" }}>
           <div style={{ fontSize: 10, fontWeight: 600, color: "#aaa", textTransform: "uppercase", letterSpacing: 1, marginBottom: 16 }}>
             {t.results}
           </div>
- 
+
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
             {["transport", "work"].map(m => {
               const st = result[`static_${m}`];
@@ -751,13 +751,13 @@ export default function SimulateurStabilite() {
                   }}>
                     {m === "transport" ? t.transport : t.work} — {Math.round(cg?.mass_total || 0).toLocaleString()} kg
                   </div>
- 
+
                   {/* Polygone */}
                   <div style={{ background: "#fff", border: "1.5px solid #e5e1d8", borderTop: "none", padding: "14px 16px" }}>
                     <div style={{ fontSize: 10, color: "#aaa", marginBottom: 6 }}>{t.polygon}</div>
                     <PolygonView result={result} mode={m} tractorGeom={activeTractor}/>
                   </div>
- 
+
                   {/* Jauges */}
                   {st && (
                     <div style={{ display: "flex", gap: 6, margin: "8px 0" }}>
@@ -766,7 +766,7 @@ export default function SimulateurStabilite() {
                       <Gauge label={t.global} value={st.I_static} danger={0.4} warn={0.5}/>
                     </div>
                   )}
- 
+
                   {/* Roues */}
                   <div style={{ background: "#fff", borderRadius: 10, border: "1.5px solid #e5e1d8", padding: "14px 16px", marginBottom: 8 }}>
                     <div style={{ fontSize: 10, color: "#aaa", marginBottom: 12 }}>{t.wheelLoads}</div>
@@ -776,7 +776,7 @@ export default function SimulateurStabilite() {
               );
             })}
           </div>
- 
+
           {/* Critères pleine largeur */}
           <div style={{ background: "#fff", borderRadius: 14, border: "1.5px solid #e5e1d8", padding: "16px 18px", marginTop: 14 }}>
             <div style={{ fontSize: 11, color: "#aaa", marginBottom: 10 }}>{t.criteria}</div>
@@ -799,7 +799,7 @@ export default function SimulateurStabilite() {
           </div>
         </div>
       )}
- 
+
       <StickyBar result={result} mode={mode} t={t} onModeChange={setMode}/>
     </div>
   );
