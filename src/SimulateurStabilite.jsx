@@ -554,25 +554,14 @@ export default function SimulateurStabilite() {
               style={{ width: "100%", display: "block" }}
             />
             {/* Contenu par dessus */}
-            <div style={{
-              position: "absolute", inset: 0,
-              display: "flex", alignItems: "center", padding: "0 24px",
-            }}>
-              {/* Flèche gauche */}
-              <button onClick={() => setTractorIdx(i => Math.max(0, i - 1))} disabled={tractorIdx === 0} style={{
-                width: 38, height: 38, borderRadius: 9, border: "1.5px solid #e5e1d8",
-                background: "rgba(255,255,255,0.85)", cursor: tractorIdx === 0 ? "not-allowed" : "pointer",
-                fontSize: 20, color: tractorIdx === 0 ? "#ddd" : "#444",
-                display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, zIndex: 2,
-              }}>‹</button>
+            <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", padding: "0 24px" }}>
 
               {/* Widget infos à gauche */}
               <div style={{
                 flex: "0 0 280px", marginLeft: 16, zIndex: 2,
                 background: "rgba(255,255,255,0.88)",
                 backdropFilter: "blur(8px)",
-                borderRadius: 16,
-                padding: "20px 22px",
+                borderRadius: 16, padding: "20px 22px",
                 border: "1px solid rgba(255,255,255,0.95)",
                 boxShadow: "0 4px 20px rgba(0,0,0,0.10)",
               }}>
@@ -604,26 +593,37 @@ export default function SimulateurStabilite() {
                   </>
                 )}
               </div>
-
-              {/* Image tracteur PNG transparent — positionnée à droite, taille proportionnelle */}
-              <div style={{ position: "absolute", right: "5%", top: "55%", transform: "translateY(-50%)", zIndex: 2, height: "85%", display: "flex", alignItems: "center" }}>
-                {activeTractor && (
-                  <TractorImage
-                    tractorKey={activeTractor.key}
-                    color={tractorColor}
-                    style={{ height: "100%", width: "auto", objectFit: "contain" }}
-                  />
-                )}
-              </div>
-
-              {/* Flèche droite */}
-              <button onClick={() => setTractorIdx(i => Math.min(tractorList.length - 1, i + 1))} disabled={tractorIdx === tractorList.length - 1} style={{
-                width: 38, height: 38, borderRadius: 9, border: "1.5px solid #e5e1d8",
-                background: "rgba(255,255,255,0.85)", cursor: tractorIdx === tractorList.length - 1 ? "not-allowed" : "pointer",
-                fontSize: 20, color: tractorIdx === tractorList.length - 1 ? "#ddd" : "#444",
-                display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, zIndex: 2,
-              }}>›</button>
             </div>
+
+            {/* Flèche gauche — à gauche du tracteur */}
+            <button onClick={() => setTractorIdx(i => Math.max(0, i - 1))} disabled={tractorIdx === 0} style={{
+              position: "absolute", right: "44%", top: "55%", transform: "translateY(-50%)",
+              width: 42, height: 42, borderRadius: "50%", border: "none",
+              background: tractorIdx === 0 ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.85)",
+              cursor: tractorIdx === 0 ? "not-allowed" : "pointer",
+              fontSize: 22, color: tractorIdx === 0 ? "#ccc" : "#444",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              zIndex: 3, boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+            }}>‹</button>
+
+            {/* Image tracteur */}
+            <div style={{ position: "absolute", right: "5%", top: "55%", transform: "translateY(-50%)", zIndex: 2, height: "85%", display: "flex", alignItems: "center" }}>
+              {activeTractor && (
+                <TractorImage tractorKey={activeTractor.key} color={tractorColor}
+                  style={{ height: "100%", width: "auto", objectFit: "contain" }}/>
+              )}
+            </div>
+
+            {/* Flèche droite — à droite du tracteur */}
+            <button onClick={() => setTractorIdx(i => Math.min(tractorList.length - 1, i + 1))} disabled={tractorIdx === tractorList.length - 1} style={{
+              position: "absolute", right: "1%", top: "55%", transform: "translateY(-50%)",
+              width: 42, height: 42, borderRadius: "50%", border: "none",
+              background: tractorIdx === tractorList.length - 1 ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.85)",
+              cursor: tractorIdx === tractorList.length - 1 ? "not-allowed" : "pointer",
+              fontSize: 22, color: tractorIdx === tractorList.length - 1 ? "#ccc" : "#444",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              zIndex: 3, boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+            }}>›</button>
 
             {/* Dots */}
             <div style={{ position: "absolute", bottom: 10, left: 0, right: 0, zIndex: 2 }}>
