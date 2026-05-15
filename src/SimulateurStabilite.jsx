@@ -546,35 +546,33 @@ export default function SimulateurStabilite() {
       {tractorBrand && (
         <Section label={t.tractorModel} bg="#fff">
           {tractorList.length > 0 ? (
-          <div style={{
-            position: "relative",
-            backgroundImage: `url(/brands/${tractorBrand}.png)`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            minHeight: 280,
-            overflow: "hidden",
-          }}>
-            {/* Overlay léger */}
-            <div style={{ position: "absolute", inset: 0, background: "rgba(255,255,255,0.55)" }}/>
-
-            {/* Contenu */}
-            <div style={{ position: "relative", display: "flex", alignItems: "center", padding: "20px 24px" }}>
-
+          <div style={{ position: "relative", overflow: "hidden" }}>
+            {/* Image de fond pleine largeur — proportions préservées */}
+            <img
+              src={`/brands/${tractorBrand}.png`}
+              alt={tractorBrand}
+              style={{ width: "100%", display: "block" }}
+            />
+            {/* Contenu par dessus */}
+            <div style={{
+              position: "absolute", inset: 0,
+              display: "flex", alignItems: "center", padding: "0 24px",
+            }}>
               {/* Flèche gauche */}
               <button onClick={() => setTractorIdx(i => Math.max(0, i - 1))} disabled={tractorIdx === 0} style={{
                 width: 38, height: 38, borderRadius: 9, border: "1.5px solid #e5e1d8",
-                background: "rgba(255,255,255,0.8)", cursor: tractorIdx === 0 ? "not-allowed" : "pointer",
+                background: "rgba(255,255,255,0.85)", cursor: tractorIdx === 0 ? "not-allowed" : "pointer",
                 fontSize: 20, color: tractorIdx === 0 ? "#ddd" : "#444",
                 display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, zIndex: 2,
               }}>‹</button>
 
               {/* Infos à gauche */}
-              <div style={{ flex: "0 0 220px", padding: "0 24px", zIndex: 2 }}>
-                <div style={{ fontSize: 20, fontWeight: 700, color: "#1a1a18", marginBottom: 16 }}>
+              <div style={{ flex: "0 0 200px", padding: "0 20px", zIndex: 2 }}>
+                <div style={{ fontSize: 18, fontWeight: 700, color: "#1a1a18", marginBottom: 12 }}>
                   {activeTractor?.name}
                 </div>
                 {activeTractor && (
-                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                     {[
                       [t.mass, `${activeTractor.mass?.toLocaleString()} kg`],
                       [t.frontPct, `${activeTractor.mass_front_pct}% AV`],
@@ -583,7 +581,7 @@ export default function SimulateurStabilite() {
                       ["Pneu", activeTractor.tire_defaults?.rear || "—"],
                     ].map(([lbl, val]) => (
                       <div key={lbl}>
-                        <div style={{ fontSize: 10, color: "#888" }}>{lbl}</div>
+                        <div style={{ fontSize: 10, color: "#666" }}>{lbl}</div>
                         <div style={{ fontSize: 13, fontWeight: 500, color: "#1a1a18" }}>{val}</div>
                       </div>
                     ))}
@@ -591,13 +589,13 @@ export default function SimulateurStabilite() {
                 )}
               </div>
 
-              {/* Image tracteur — grande, à droite */}
-              <div style={{ flex: 1, display: "flex", justifyContent: "flex-end", zIndex: 2 }}>
+              {/* Image tracteur PNG transparent — grande à droite */}
+              <div style={{ flex: 1, display: "flex", justifyContent: "flex-end", zIndex: 2, paddingRight: 60 }}>
                 {activeTractor && (
                   <TractorImage
                     tractorKey={activeTractor.key}
                     color={tractorColor}
-                    style={{ height: 220, width: "auto", maxWidth: "70%", objectFit: "contain" }}
+                    style={{ height: "60%", maxHeight: 220, width: "auto", objectFit: "contain" }}
                   />
                 )}
               </div>
@@ -605,14 +603,14 @@ export default function SimulateurStabilite() {
               {/* Flèche droite */}
               <button onClick={() => setTractorIdx(i => Math.min(tractorList.length - 1, i + 1))} disabled={tractorIdx === tractorList.length - 1} style={{
                 width: 38, height: 38, borderRadius: 9, border: "1.5px solid #e5e1d8",
-                background: "rgba(255,255,255,0.8)", cursor: tractorIdx === tractorList.length - 1 ? "not-allowed" : "pointer",
+                background: "rgba(255,255,255,0.85)", cursor: tractorIdx === tractorList.length - 1 ? "not-allowed" : "pointer",
                 fontSize: 20, color: tractorIdx === tractorList.length - 1 ? "#ddd" : "#444",
                 display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, zIndex: 2,
               }}>›</button>
             </div>
 
             {/* Dots */}
-            <div style={{ position: "relative", zIndex: 2, paddingBottom: 16 }}>
+            <div style={{ position: "absolute", bottom: 10, left: 0, right: 0, zIndex: 2 }}>
               <Dots total={tractorList.length} current={tractorIdx} onSelect={setTractorIdx} color={tractorColor}/>
             </div>
           </div>
