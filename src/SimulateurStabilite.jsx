@@ -595,8 +595,8 @@ export default function SimulateurStabilite() {
               fontSize: 20, color: tractorIdx === tractorList.length - 1 ? "#ddd" : "#444",
               display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 60,
             }}>›</button>
-            </div> {/* fin relative */}
-          </div> {/* fin fond marque */}
+          </div>
+          </div>
           ) : (
             <div style={{ padding: "30px 24px", textAlign: "center", color: "#bbb", fontSize: 13, fontStyle: "italic" }}>
               {t.noMachineData} — {tractorBrand}
