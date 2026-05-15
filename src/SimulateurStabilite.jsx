@@ -589,13 +589,13 @@ export default function SimulateurStabilite() {
                 )}
               </div>
 
-              {/* Image tracteur PNG transparent — grande à droite */}
-              <div style={{ flex: 1, display: "flex", justifyContent: "flex-end", zIndex: 2, paddingRight: 60 }}>
+              {/* Image tracteur PNG transparent — positionnée à droite, taille proportionnelle */}
+              <div style={{ position: "absolute", right: "5%", top: "50%", transform: "translateY(-50%)", zIndex: 2, height: "85%", display: "flex", alignItems: "center" }}>
                 {activeTractor && (
                   <TractorImage
                     tractorKey={activeTractor.key}
                     color={tractorColor}
-                    style={{ height: "60%", maxHeight: 220, width: "auto", objectFit: "contain" }}
+                    style={{ height: "100%", width: "auto", objectFit: "contain" }}
                   />
                 )}
               </div>
