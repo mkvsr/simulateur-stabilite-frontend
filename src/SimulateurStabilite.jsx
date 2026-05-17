@@ -176,17 +176,17 @@ function BrandLogo({ brandKey, color, active, onClick }) {
         transition: "all 0.18s", flexShrink: 0,
       }}>
       <div style={{
-        width: 90, height: 90, borderRadius: 14,
-        background: active ? color + "12" : "#f5f5f5",
+        width: 180, height: 60,
         display: "flex", alignItems: "center", justifyContent: "center",
-        overflow: "hidden", transition: "all 0.18s",
-        transform: hovered ? "scale(1.05)" : "scale(1)",
+        overflow: "visible",
+        transform: hovered ? "scale(1.25)" : "scale(1)",
+        transition: "transform 0.18s",
       }}>
         {hasLogo ? (
           <img src={`/logos/${brandKey}.png`} alt={brandKey}
             onError={() => setHasLogo(false)}
             style={{
-              width: "80%", height: "80%", objectFit: "contain",
+              width: "100%", height: "100%", objectFit: "contain",
               filter: active ? "none" : "grayscale(100%)",
               transition: "filter 0.2s",
             }}/>
