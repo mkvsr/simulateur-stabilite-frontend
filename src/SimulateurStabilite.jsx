@@ -161,32 +161,47 @@ function ToggleOption({ label, active, onToggle, children }) {
   );
 }
 
+function BrandLogo({ brandKey, color, active, onClick }) {
+  const [hasLogo, setHasLogo] = useState(true);
+  return (
+    <button onClick={onClick} style={{
+      display: "flex", flexDirection: "column", alignItems: "center",
+      gap: 6, padding: "12px 16px", border: "none", cursor: "pointer",
+      background: active ? color + "15" : "transparent",
+      borderBottom: active ? `3px solid ${color}` : "3px solid transparent",
+      transition: "all 0.18s", flexShrink: 0,
+    }}>
+      <div style={{
+        width: 48, height: 48, borderRadius: 10,
+        background: active ? color + "18" : "#f5f5f5",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        border: active ? `2px solid ${color}40` : "2px solid transparent",
+        overflow: "hidden", transition: "all 0.18s",
+      }}>
+        {hasLogo ? (
+          <img src={`/logos/${brandKey}.png`} alt={brandKey}
+            onError={() => setHasLogo(false)}
+            style={{ width: "80%", height: "80%", objectFit: "contain" }}/>
+        ) : (
+          <span style={{ fontWeight: 700, fontSize: 13, color: active ? color : "#999" }}>
+            {initials(brandKey)}
+          </span>
+        )}
+      </div>
+      <span style={{ fontSize: 9, color: active ? color : "#999", fontWeight: active ? 600 : 400, whiteSpace: "nowrap" }}>
+        {brandKey}
+      </span>
+    </button>
+  );
+}
+
 function BrandBand({ brands, selected, onSelect }) {
   return (
-    <div style={{ display: "flex", overflowX: "auto", background: "#1a1a18", padding: "0 8px" }}>
-      {brands.map(({ key, color }) => {
-        const active = selected === key;
-        return (
-          <button key={key} onClick={() => onSelect(key)} style={{
-            display: "flex", flexDirection: "column", alignItems: "center",
-            gap: 5, padding: "12px 16px", border: "none", cursor: "pointer",
-            background: active ? color + "22" : "transparent",
-            borderBottom: active ? `3px solid ${color}` : "3px solid transparent",
-            transition: "all 0.18s", flexShrink: 0,
-          }}>
-            <div style={{
-              width: 36, height: 36, borderRadius: 8,
-              background: active ? color : "#333",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontWeight: 700, fontSize: 12, color: active ? "#fff" : "#666",
-              transition: "all 0.18s",
-            }}>{initials(key)}</div>
-            <span style={{ fontSize: 9, color: active ? color : "#555", fontWeight: active ? 600 : 400, whiteSpace: "nowrap" }}>
-              {key}
-            </span>
-          </button>
-        );
-      })}
+    <div style={{ display: "flex", overflowX: "auto", background: "#fff", padding: "0 8px", borderBottom: "1.5px solid #e5e1d8" }}>
+      {brands.map(({ key, color }) => (
+        <BrandLogo key={key} brandKey={key} color={color}
+          active={selected === key} onClick={() => onSelect(key)}/>
+      ))}
     </div>
   );
 }
@@ -520,23 +535,23 @@ export default function SimulateurStabilite() {
     <div style={{ background: "#f5f3ee", minHeight: "100vh", paddingBottom: 80 }}>
 
       {/* HEADER */}
-      <div style={{ background: "#1a1a18", padding: "12px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div style={{ background: "#fff", padding: "20px 24px 16px", borderBottom: "1.5px solid #e5e1d8", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div>
-          <div style={{ fontSize: 15, fontWeight: 700, color: "#fff" }}>{t.title}</div>
-          <div style={{ fontSize: 9, color: "#444" }}>Maneko — v20</div>
+          <div style={{ fontSize: 26, fontWeight: 700, color: "#1a1a18", letterSpacing: -0.5 }}>Simulateur de stabilité</div>
+          <div style={{ fontSize: 11, color: "#aaa", marginTop: 2 }}>Maneko — v20</div>
         </div>
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-          {computing && <span style={{ fontSize: 11, color: "#555", fontStyle: "italic" }}>{t.computing}</span>}
+          {computing && <span style={{ fontSize: 11, color: "#aaa", fontStyle: "italic" }}>{t.computing}</span>}
           <button onClick={() => setLang(l => l === "fr" ? "en" : "fr")} style={{
-            padding: "5px 11px", borderRadius: 7, border: "1.5px solid #333",
-            background: "transparent", color: "#888", fontSize: 11, cursor: "pointer",
+            padding: "6px 14px", borderRadius: 8, border: "1.5px solid #e0ddd8",
+            background: "#fafaf8", color: "#555", fontSize: 12, cursor: "pointer", fontWeight: 500,
           }}>{lang === "fr" ? "EN" : "FR"}</button>
         </div>
       </div>
 
       {/* MARQUES TRACTEUR */}
-      <div style={{ borderBottom: "1.5px solid #e5e1d8" }}>
-        <div style={{ padding: "10px 20px 0", fontSize: 10, fontWeight: 600, color: "#aaa", textTransform: "uppercase", letterSpacing: 1, background: "#1a1a18" }}>
+      <div>
+        <div style={{ padding: "10px 20px 0", fontSize: 10, fontWeight: 600, color: "#aaa", textTransform: "uppercase", letterSpacing: 1, background: "#fff" }}>
           {t.tractorBrand}
         </div>
         <BrandBand brands={TRACTOR_BRANDS} selected={tractorBrand} onSelect={setTractorBrand}/>
@@ -640,7 +655,7 @@ export default function SimulateurStabilite() {
 
       {/* MARQUES MACHINE */}
       <div style={{ borderBottom: "1.5px solid #e5e1d8" }}>
-        <div style={{ padding: "10px 20px 0", fontSize: 10, fontWeight: 600, color: "#aaa", textTransform: "uppercase", letterSpacing: 1, background: "#1a1a18" }}>
+        <div style={{ padding: "10px 20px 0", fontSize: 10, fontWeight: 600, color: "#aaa", textTransform: "uppercase", letterSpacing: 1, background: "#fff" }}>
           {t.machineBrand}
         </div>
         <BrandBand brands={MACHINE_BRANDS} selected={machineBrand} onSelect={setMachineBrand}/>
