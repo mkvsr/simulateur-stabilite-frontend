@@ -163,32 +163,40 @@ function ToggleOption({ label, active, onToggle, children }) {
 
 function BrandLogo({ brandKey, color, active, onClick }) {
   const [hasLogo, setHasLogo] = useState(true);
+  const [hovered, setHovered] = useState(false);
   return (
-    <button onClick={onClick} style={{
-      display: "flex", flexDirection: "column", alignItems: "center",
-      gap: 6, padding: "12px 16px", border: "none", cursor: "pointer",
-      background: active ? color + "15" : "transparent",
-      borderBottom: active ? `3px solid ${color}` : "3px solid transparent",
-      transition: "all 0.18s", flexShrink: 0,
-    }}>
+    <button onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        display: "flex", flexDirection: "column", alignItems: "center",
+        gap: 6, padding: "12px 20px", border: "none", cursor: "pointer",
+        background: "transparent",
+        borderBottom: active ? `3px solid ${color}` : "3px solid transparent",
+        transition: "all 0.18s", flexShrink: 0,
+      }}>
       <div style={{
-        width: 48, height: 48, borderRadius: 10,
-        background: active ? color + "18" : "#f5f5f5",
+        width: 90, height: 90, borderRadius: 14,
+        background: active ? color + "12" : "#f5f5f5",
         display: "flex", alignItems: "center", justifyContent: "center",
-        border: active ? `2px solid ${color}40` : "2px solid transparent",
         overflow: "hidden", transition: "all 0.18s",
+        transform: hovered ? "scale(1.05)" : "scale(1)",
       }}>
         {hasLogo ? (
           <img src={`/logos/${brandKey}.png`} alt={brandKey}
             onError={() => setHasLogo(false)}
-            style={{ width: "80%", height: "80%", objectFit: "contain" }}/>
+            style={{
+              width: "80%", height: "80%", objectFit: "contain",
+              filter: active ? "none" : "grayscale(100%)",
+              transition: "filter 0.2s",
+            }}/>
         ) : (
-          <span style={{ fontWeight: 700, fontSize: 13, color: active ? color : "#999" }}>
+          <span style={{ fontWeight: 700, fontSize: 20, color: active ? color : "#999" }}>
             {initials(brandKey)}
           </span>
         )}
       </div>
-      <span style={{ fontSize: 9, color: active ? color : "#999", fontWeight: active ? 600 : 400, whiteSpace: "nowrap" }}>
+      <span style={{ fontSize: 10, color: active ? color : "#aaa", fontWeight: active ? 600 : 400, whiteSpace: "nowrap" }}>
         {brandKey}
       </span>
     </button>
