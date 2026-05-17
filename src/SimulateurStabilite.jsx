@@ -170,7 +170,7 @@ function BrandLogo({ brandKey, color, active, onClick }) {
       onMouseLeave={() => setHovered(false)}
       style={{
         display: "flex", flexDirection: "column", alignItems: "center",
-        gap: 6, padding: "12px 20px", border: "none", cursor: "pointer",
+        gap: 0, padding: "12px 20px", border: "none", cursor: "pointer",
         background: "transparent",
         borderBottom: active ? `3px solid ${color}` : "3px solid transparent",
         transition: "all 0.18s", flexShrink: 0,
@@ -179,7 +179,7 @@ function BrandLogo({ brandKey, color, active, onClick }) {
         width: 180, height: 60,
         display: "flex", alignItems: "center", justifyContent: "center",
         overflow: "visible",
-        transform: hovered ? "scale(1.25)" : "scale(1)",
+        transform: hovered || active ? "scale(1.25)" : "scale(1)",
         transition: "transform 0.18s",
       }}>
         {hasLogo ? (
@@ -187,18 +187,15 @@ function BrandLogo({ brandKey, color, active, onClick }) {
             onError={() => setHasLogo(false)}
             style={{
               width: "100%", height: "100%", objectFit: "contain",
-              filter: active ? "none" : "grayscale(100%)",
+              filter: (active || hovered) ? "none" : "grayscale(100%)",
               transition: "filter 0.2s",
             }}/>
         ) : (
-          <span style={{ fontWeight: 700, fontSize: 20, color: active ? color : "#999" }}>
+          <span style={{ fontWeight: 700, fontSize: 20, color: active || hovered ? color : "#999" }}>
             {initials(brandKey)}
           </span>
         )}
       </div>
-      <span style={{ fontSize: 10, color: active ? color : "#aaa", fontWeight: active ? 600 : 400, whiteSpace: "nowrap" }}>
-        {brandKey}
-      </span>
     </button>
   );
 }
