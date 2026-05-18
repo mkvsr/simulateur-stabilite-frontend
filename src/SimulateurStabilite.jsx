@@ -162,8 +162,12 @@ function ToggleOption({ label, active, onToggle, children }) {
 }
 
 function BrandLogo({ brandKey, color, active, onClick }) {
-  const [hasLogo, setHasLogo] = useState(true);
+  const [src, setSrc] = useState(`/logos/${brandKey}.png`);
+  const [failed, setFailed] = useState(false);
   const [hovered, setHovered] = useState(false);
+
+  const handleError = () => setFailed(true);
+
   return (
     <button onClick={onClick}
       onMouseEnter={() => setHovered(true)}
@@ -182,9 +186,8 @@ function BrandLogo({ brandKey, color, active, onClick }) {
         transform: hovered || active ? "scale(1.25)" : "scale(1)",
         transition: "transform 0.18s",
       }}>
-        {hasLogo ? (
-          <img src={`/logos/${brandKey}.png`} alt={brandKey}
-            onError={() => setHasLogo(false)}
+        {!failed ? (
+          <img src={src} alt={brandKey} onError={handleError}
             style={{
               width: "100%", height: "100%", objectFit: "contain",
               filter: (active || hovered) ? "none" : "grayscale(100%)",
@@ -200,7 +203,13 @@ function BrandLogo({ brandKey, color, active, onClick }) {
   );
 }
 
-function BrandBand({ brands, selected, onSelect }) {
+function BrandBackground({ brandKey, style }) {
+  const [src, setSrc] = useState(`/brands/${brandKey}.webp`);
+  const handleError = () => {
+    if (src.endsWith(".webp")) setSrc(`/brands/${brandKey}.png`);
+  };
+  return <img src={src} alt={brandKey} onError={handleError} style={{ width: "100%", display: "block", ...style }}/>;
+}
   return (
     <div style={{ display: "flex", overflowX: "auto", background: "#fff", padding: "0 8px", borderBottom: "1.5px solid #e5e1d8" }}>
       {brands.map(({ key, color }) => (
@@ -212,18 +221,22 @@ function BrandBand({ brands, selected, onSelect }) {
 }
 
 function TractorImage({ tractorKey, color, style = {} }) {
-  const [hasImage, setHasImage] = useState(true);
-  if (hasImage) {
-    return (
-      <img
-        src={`/tractors/${tractorKey}.png`}
-        alt={tractorKey}
-        onError={() => setHasImage(false)}
-        style={{ height: 220, width: "auto", maxWidth: "100%", objectFit: "contain", display: "block", ...style }}
-      />
-    );
-  }
-  return <TractorSVG color={color}/>;
+  const [src, setSrc] = useState(`/tractors/${tractorKey}.webp`);
+  const [failed, setFailed] = useState(false);
+
+  const handleError = () => {
+    if (src.endsWith(".webp")) {
+      setSrc(`/tractors/${tractorKey}.png`);
+    } else {
+      setFailed(true);
+    }
+  };
+
+  if (failed) return <TractorSVG color={color}/>;
+  return (
+    <img src={src} alt={tractorKey} onError={handleError}
+      style={{ height: 220, width: "auto", maxWidth: "100%", objectFit: "contain", display: "block", ...style }}/>
+  );
 }
 
 function TractorSVG({ color }) {
@@ -568,11 +581,7 @@ export default function SimulateurStabilite() {
           {tractorList.length > 0 ? (
           <div style={{ position: "relative", overflow: "hidden" }}>
             {/* Image de fond pleine largeur — proportions préservées */}
-            <img
-              src={`/brands/${tractorBrand}.png`}
-              alt={tractorBrand}
-              style={{ width: "100%", display: "block" }}
-            />
+            <BrandBackground brandKey={tractorBrand}/>
             {/* Contenu par dessus */}
             <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", padding: "0 24px" }}>
 
