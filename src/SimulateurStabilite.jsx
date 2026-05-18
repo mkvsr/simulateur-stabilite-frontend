@@ -241,72 +241,6 @@ function TractorImage({ tractorKey, color, style = {} }) {
   );
 }
 
-function AnimatedTractorImage({ tractorKey, color, direction }) {
-  const [current, setCurrent] = useState({ key: tractorKey, phase: "visible" });
-  const [incoming, setIncoming] = useState(null);
-  const prevKey = useRef(tractorKey);
-
-  useEffect(() => {
-    if (tractorKey === prevKey.current) return;
-    prevKey.current = tractorKey;
-
-    const exitX = direction === "next" ? "-120px" : "120px";
-    const enterX = direction === "next" ? "120px" : "-120px";
-
-    // Phase 1 : current sort
-    setCurrent(c => ({ ...c, phase: "exiting", exitX }));
-
-    // Phase 2 : incoming entre
-    setIncoming({ key: tractorKey, enterX, phase: "entering" });
-
-    // Phase 3 : incoming devient visible
-    const t1 = setTimeout(() => {
-      setIncoming(i => i ? { ...i, phase: "visible" } : i);
-    }, 50);
-
-    // Phase 4 : cleanup
-    const t2 = setTimeout(() => {
-      setCurrent({ key: tractorKey, phase: "visible" });
-      setIncoming(null);
-    }, 380);
-
-    return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, [tractorKey, direction]);
-
-  const getStyle = (phase, exitX, enterX) => {
-    if (phase === "visible") return { transform: "translateX(0) scale(1)", opacity: 1 };
-    if (phase === "exiting") return { transform: `translateX(${exitX}) scale(0.8)`, opacity: 0 };
-    if (phase === "entering") return { transform: `translateX(${enterX}) scale(0.8)`, opacity: 0 };
-    return {};
-  };
-
-  return (
-    <div style={{ position: "relative", height: "100%", width: "100%" }}>
-      {/* Image courante */}
-      <div style={{
-        position: "absolute", inset: 0, display: "flex", alignItems: "center",
-        transition: "transform 0.32s cubic-bezier(.4,0,.2,1), opacity 0.32s",
-        ...getStyle(current.phase, current.exitX, null),
-      }}>
-        <TractorImage tractorKey={current.key} color={color}
-          style={{ height: "100%", width: "auto", objectFit: "contain" }}/>
-      </div>
-
-      {/* Image entrante */}
-      {incoming && (
-        <div style={{
-          position: "absolute", inset: 0, display: "flex", alignItems: "center",
-          transition: incoming.phase === "visible" ? "transform 0.32s cubic-bezier(.4,0,.2,1), opacity 0.32s" : "none",
-          ...getStyle(incoming.phase, null, incoming.enterX),
-        }}>
-          <TractorImage tractorKey={incoming.key} color={color}
-            style={{ height: "100%", width: "auto", objectFit: "contain" }}/>
-        </div>
-      )}
-    </div>
-  );
-}
-
 function TractorSVG({ color }) {
   return (
     <svg width="100%" height="160" viewBox="0 0 360 160" fill="none">
@@ -603,10 +537,8 @@ export default function SimulateurStabilite() {
 
   useEffect(() => { triggerSimulate(); }, [triggerSimulate]);
 
-  const [tractorDirection, setTractorDirection] = useState("next");
-
-  const goTractorPrev = () => { setTractorDirection("prev"); setTractorIdx(i => Math.max(0, i - 1)); };
-  const goTractorNext = () => { setTractorDirection("next"); setTractorIdx(i => Math.min(tractorList.length - 1, i + 1)); };
+  const goTractorPrev = () => setTractorIdx(i => Math.max(0, i - 1));
+  const goTractorNext = () => setTractorIdx(i => Math.min(tractorList.length - 1, i + 1));
 
   const activeTractor = tractorList[tractorIdx];
   const activeMachine = machineList[machineIdx];
@@ -708,14 +640,11 @@ export default function SimulateurStabilite() {
               zIndex: 3, boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
             }}>‹</button>
 
-            {/* Image tracteur animée */}
-            <div style={{ position: "absolute", right: "10%", top: "55%", transform: "translateY(-50%)", zIndex: 2, height: "85%", width: "50%" }}>
+            {/* Image tracteur */}
+            <div style={{ position: "absolute", right: "10%", top: "55%", transform: "translateY(-50%)", zIndex: 2, height: "85%", display: "flex", alignItems: "center" }}>
               {activeTractor && (
-                <AnimatedTractorImage
-                  tractorKey={activeTractor.key}
-                  color={tractorColor}
-                  direction={tractorDirection}
-                />
+                <TractorImage tractorKey={activeTractor.key} color={tractorColor}
+                  style={{ height: "100%", width: "auto", objectFit: "contain" }}/>
               )}
             </div>
 
