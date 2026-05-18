@@ -709,7 +709,7 @@ export default function SimulateurStabilite() {
             }}>‹</button>
 
             {/* Image tracteur animée */}
-            <div style={{ position: "absolute", right: "10%", top: "55%", transform: "translateY(-50%)", zIndex: 2, height: "85%", overflow: "hidden" }}>
+            <div style={{ position: "absolute", right: "10%", top: "55%", transform: "translateY(-50%)", zIndex: 2, height: "85%", width: "50%" }}>
               {activeTractor && (
                 <AnimatedTractorImage
                   tractorKey={activeTractor.key}
