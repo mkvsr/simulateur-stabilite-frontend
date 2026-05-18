@@ -241,7 +241,46 @@ function TractorImage({ tractorKey, color, style = {} }) {
   );
 }
 
-function TractorSVG({ color }) {
+function AnimatedTractorImage({ tractorKey, color, direction }) {
+  const [displayKey, setDisplayKey] = useState(tractorKey);
+  const [animState, setAnimState] = useState("idle"); // idle | exit-left | exit-right | enter-left | enter-right
+  const prevKeyRef = useRef(tractorKey);
+
+  useEffect(() => {
+    if (tractorKey === prevKeyRef.current) return;
+    const exitAnim = direction === "next" ? "exit-left" : "exit-right";
+    const enterAnim = direction === "next" ? "enter-right" : "enter-left";
+    setAnimState(exitAnim);
+    const t1 = setTimeout(() => {
+      setDisplayKey(tractorKey);
+      setAnimState(enterAnim);
+      prevKeyRef.current = tractorKey;
+    }, 280);
+    const t2 = setTimeout(() => setAnimState("idle"), 560);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, [tractorKey, direction]);
+
+  const transforms = {
+    "idle":        "translateX(0)    scale(1)",
+    "exit-left":   "translateX(-60px) scale(0.8)",
+    "exit-right":  "translateX(60px)  scale(0.8)",
+    "enter-right": "translateX(80px)  scale(0.8)",
+    "enter-left":  "translateX(-80px) scale(0.8)",
+  };
+  const opacities = { "idle": 1, "exit-left": 0, "exit-right": 0, "enter-right": 0, "enter-left": 0 };
+
+  return (
+    <div style={{
+      transform: transforms[animState] || "translateX(0) scale(1)",
+      opacity: opacities[animState] ?? 1,
+      transition: animState === "idle" ? "transform 0.28s cubic-bezier(.4,0,.2,1), opacity 0.28s" : "transform 0.28s cubic-bezier(.4,0,.2,1), opacity 0.28s",
+      height: "100%", display: "flex", alignItems: "center",
+    }}>
+      <TractorImage tractorKey={displayKey} color={color}
+        style={{ height: "100%", width: "auto", objectFit: "contain" }}/>
+    </div>
+  );
+}
   return (
     <svg width="100%" height="160" viewBox="0 0 360 160" fill="none">
       <rect x="90" y="50" width="180" height="80" rx="10" fill={color} opacity=".1"/>
@@ -537,7 +576,10 @@ export default function SimulateurStabilite() {
 
   useEffect(() => { triggerSimulate(); }, [triggerSimulate]);
 
-  const activeTractor = tractorList[tractorIdx];
+  const [tractorDirection, setTractorDirection] = useState("next");
+
+  const goTractorPrev = () => { setTractorDirection("prev"); setTractorIdx(i => Math.max(0, i - 1)); };
+  const goTractorNext = () => { setTractorDirection("next"); setTractorIdx(i => Math.min(tractorList.length - 1, i + 1)); };
   const activeMachine = machineList[machineIdx];
   const tractorColor = TRACTOR_BRANDS.find(b => b.key === tractorBrand)?.color || "#3B6D11";
   const machineColor = MACHINE_BRANDS.find(b => b.key === machineBrand)?.color || "#1A5276";
@@ -627,7 +669,7 @@ export default function SimulateurStabilite() {
             </div>
 
             {/* Flèche gauche — à gauche du tracteur */}
-            <button onClick={() => setTractorIdx(i => Math.max(0, i - 1))} disabled={tractorIdx === 0} style={{
+            <button onClick={goTractorPrev} disabled={tractorIdx === 0} style={{
               position: "absolute", left: "25%", top: "55%", transform: "translateY(-50%)",
               width: 42, height: 42, borderRadius: "50%", border: "none",
               background: tractorIdx === 0 ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.85)",
@@ -637,16 +679,19 @@ export default function SimulateurStabilite() {
               zIndex: 3, boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
             }}>‹</button>
 
-            {/* Image tracteur */}
-            <div style={{ position: "absolute", right: "10%", top: "55%", transform: "translateY(-50%)", zIndex: 2, height: "85%", display: "flex", alignItems: "center" }}>
+            {/* Image tracteur animée */}
+            <div style={{ position: "absolute", right: "10%", top: "55%", transform: "translateY(-50%)", zIndex: 2, height: "85%", overflow: "hidden" }}>
               {activeTractor && (
-                <TractorImage tractorKey={activeTractor.key} color={tractorColor}
-                  style={{ height: "100%", width: "auto", objectFit: "contain" }}/>
+                <AnimatedTractorImage
+                  tractorKey={activeTractor.key}
+                  color={tractorColor}
+                  direction={tractorDirection}
+                />
               )}
             </div>
 
             {/* Flèche droite — à droite du tracteur */}
-            <button onClick={() => setTractorIdx(i => Math.min(tractorList.length - 1, i + 1))} disabled={tractorIdx === tractorList.length - 1} style={{
+            <button onClick={goTractorNext} disabled={tractorIdx === tractorList.length - 1} style={{
               position: "absolute", right: "15%", top: "55%", transform: "translateY(-50%)",
               width: 42, height: 42, borderRadius: "50%", border: "none",
               background: tractorIdx === tractorList.length - 1 ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.85)",
