@@ -284,6 +284,8 @@ function AnimatedTractorImage({ tractorKey, color, direction }) {
 
 function TractorSVG({ color }) {
   return (
+    <svg width="100%" height="160" viewBox="0 0 360 160" fill="none">
+      <rect x="90" y="50" width="180" height="80" rx="10" fill={color} opacity=".1"/>
       <rect x="100" y="60" width="100" height="60" rx="8" fill={color} opacity=".2"/>
       <rect x="210" y="68" width="54" height="44" rx="5" fill={color} opacity=".35"/>
       <rect x="264" y="78" width="26" height="28" rx="3" fill={color} opacity=".25"/>
