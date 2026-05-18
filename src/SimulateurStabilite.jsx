@@ -242,42 +242,67 @@ function TractorImage({ tractorKey, color, style = {} }) {
 }
 
 function AnimatedTractorImage({ tractorKey, color, direction }) {
-  const [displayKey, setDisplayKey] = useState(tractorKey);
-  const [animState, setAnimState] = useState("idle"); // idle | exit-left | exit-right | enter-left | enter-right
-  const prevKeyRef = useRef(tractorKey);
+  const [current, setCurrent] = useState({ key: tractorKey, phase: "visible" });
+  const [incoming, setIncoming] = useState(null);
+  const prevKey = useRef(tractorKey);
 
   useEffect(() => {
-    if (tractorKey === prevKeyRef.current) return;
-    const exitAnim = direction === "next" ? "exit-left" : "exit-right";
-    const enterAnim = direction === "next" ? "enter-right" : "enter-left";
-    setAnimState(exitAnim);
+    if (tractorKey === prevKey.current) return;
+    prevKey.current = tractorKey;
+
+    const exitX = direction === "next" ? "-120px" : "120px";
+    const enterX = direction === "next" ? "120px" : "-120px";
+
+    // Phase 1 : current sort
+    setCurrent(c => ({ ...c, phase: "exiting", exitX }));
+
+    // Phase 2 : incoming entre
+    setIncoming({ key: tractorKey, enterX, phase: "entering" });
+
+    // Phase 3 : incoming devient visible
     const t1 = setTimeout(() => {
-      setDisplayKey(tractorKey);
-      setAnimState(enterAnim);
-      prevKeyRef.current = tractorKey;
-    }, 280);
-    const t2 = setTimeout(() => setAnimState("idle"), 560);
+      setIncoming(i => i ? { ...i, phase: "visible" } : i);
+    }, 50);
+
+    // Phase 4 : cleanup
+    const t2 = setTimeout(() => {
+      setCurrent({ key: tractorKey, phase: "visible" });
+      setIncoming(null);
+    }, 380);
+
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, [tractorKey, direction]);
 
-  const transforms = {
-    "idle":        "translateX(0)    scale(1)",
-    "exit-left":   "translateX(-60px) scale(0.8)",
-    "exit-right":  "translateX(60px)  scale(0.8)",
-    "enter-right": "translateX(80px)  scale(0.8)",
-    "enter-left":  "translateX(-80px) scale(0.8)",
+  const getStyle = (phase, exitX, enterX) => {
+    if (phase === "visible") return { transform: "translateX(0) scale(1)", opacity: 1 };
+    if (phase === "exiting") return { transform: `translateX(${exitX}) scale(0.8)`, opacity: 0 };
+    if (phase === "entering") return { transform: `translateX(${enterX}) scale(0.8)`, opacity: 0 };
+    return {};
   };
-  const opacities = { "idle": 1, "exit-left": 0, "exit-right": 0, "enter-right": 0, "enter-left": 0 };
 
   return (
-    <div style={{
-      transform: transforms[animState] || "translateX(0) scale(1)",
-      opacity: opacities[animState] ?? 1,
-      transition: animState === "idle" ? "transform 0.28s cubic-bezier(.4,0,.2,1), opacity 0.28s" : "transform 0.28s cubic-bezier(.4,0,.2,1), opacity 0.28s",
-      height: "100%", display: "flex", alignItems: "center",
-    }}>
-      <TractorImage tractorKey={displayKey} color={color}
-        style={{ height: "100%", width: "auto", objectFit: "contain" }}/>
+    <div style={{ position: "relative", height: "100%", width: "100%" }}>
+      {/* Image courante */}
+      <div style={{
+        position: "absolute", inset: 0, display: "flex", alignItems: "center",
+        transition: "transform 0.32s cubic-bezier(.4,0,.2,1), opacity 0.32s",
+        ...getStyle(current.phase, current.exitX, null),
+      }}>
+        <TractorImage tractorKey={current.key} color={color}
+          style={{ height: "100%", width: "auto", objectFit: "contain" }}/>
+      </div>
+
+      {/* Image entrante */}
+      {incoming && (
+        <div style={{
+          position: "absolute", inset: 0, display: "flex", alignItems: "center",
+          transition: incoming.phase === "visible" ? "transform 0.32s cubic-bezier(.4,0,.2,1), opacity 0.32s" : "none",
+          ...getStyle(incoming.phase, null, incoming.enterX),
+        }}>
+          <TractorImage tractorKey={incoming.key} color={color}
+            style={{ height: "100%", width: "auto", objectFit: "contain" }}/>
+        </div>
+      )}
     </div>
   );
 }
