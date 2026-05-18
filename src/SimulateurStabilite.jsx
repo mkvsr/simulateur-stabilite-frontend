@@ -582,6 +582,8 @@ export default function SimulateurStabilite() {
 
   const goTractorPrev = () => { setTractorDirection("prev"); setTractorIdx(i => Math.max(0, i - 1)); };
   const goTractorNext = () => { setTractorDirection("next"); setTractorIdx(i => Math.min(tractorList.length - 1, i + 1)); };
+
+  const activeTractor = tractorList[tractorIdx];
   const activeMachine = machineList[machineIdx];
   const tractorColor = TRACTOR_BRANDS.find(b => b.key === tractorBrand)?.color || "#3B6D11";
   const machineColor = MACHINE_BRANDS.find(b => b.key === machineBrand)?.color || "#1A5276";
