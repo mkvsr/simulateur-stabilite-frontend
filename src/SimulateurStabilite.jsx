@@ -210,6 +210,8 @@ function BrandBackground({ brandKey, style }) {
   };
   return <img src={src} alt={brandKey} onError={handleError} style={{ width: "100%", display: "block", ...style }}/>;
 }
+
+function BrandBand({ brands, selected, onSelect }) {
   return (
     <div style={{ display: "flex", overflowX: "auto", background: "#fff", padding: "0 8px", borderBottom: "1.5px solid #e5e1d8" }}>
       {brands.map(({ key, color }) => (
