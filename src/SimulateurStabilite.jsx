@@ -186,7 +186,7 @@ function BrandLogo({ brandKey, color, active, onClick }) {
         transition: "all 0.18s", flexShrink: 0,
       }}>
       <div style={{
-        width: 180, height: 60,
+        width: 360, height: 120,
         display: "flex", alignItems: "center", justifyContent: "center",
         overflow: "visible",
         transform: hovered || active ? "scale(1.25)" : "scale(1)",
