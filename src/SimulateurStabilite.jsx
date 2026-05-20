@@ -162,11 +162,17 @@ function ToggleOption({ label, active, onToggle, children }) {
 }
 
 function BrandLogo({ brandKey, color, active, onClick }) {
-  const [src, setSrc] = useState(`/logos/${brandKey}.png`);
+  const [src, setSrc] = useState(`/logos/${brandKey}.webp`);
   const [failed, setFailed] = useState(false);
   const [hovered, setHovered] = useState(false);
 
-  const handleError = () => setFailed(true);
+  const handleError = () => {
+    if (src.endsWith(".webp")) {
+      setSrc(`/logos/${brandKey}.png`);
+    } else {
+      setFailed(true);
+    }
+  };
 
   return (
     <button onClick={onClick}
