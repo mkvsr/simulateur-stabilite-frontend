@@ -187,7 +187,7 @@ function BrandLogo({ brandKey, color, active, onClick }) {
         minWidth: "calc(4vh + 4vw)",
       }}>
       <div style={{
-        height: "8vh",
+        height: "clamp(40px, 6vw, 80px)",
         display: "flex", alignItems: "center", justifyContent: "center",
         overflow: "visible",
         transform: hovered || active ? "scale(1.25)" : "scale(1)",
