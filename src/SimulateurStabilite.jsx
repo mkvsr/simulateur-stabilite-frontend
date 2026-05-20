@@ -184,6 +184,7 @@ function BrandLogo({ brandKey, color, active, onClick }) {
         background: "transparent",
         borderBottom: active ? `3px solid ${color}` : "3px solid transparent",
         transition: "all 0.18s", flexShrink: 0,
+        minWidth: "calc(4vh + 4vw)",
       }}>
       <div style={{
         height: "8vh",
@@ -219,7 +220,7 @@ function BrandBackground({ brandKey, style }) {
 
 function BrandBand({ brands, selected, onSelect }) {
   return (
-    <div style={{ display: "flex", overflowX: "auto", background: "#fff", padding: "0", borderBottom: "1.5px solid #e5e1d8", justifyContent: "space-around", width: "100%" }}>
+    <div style={{ display: "flex", flexWrap: "wrap", background: "#fff", padding: "0", borderBottom: "1.5px solid #e5e1d8", justifyContent: "space-around", width: "100%" }}>
       {brands.map(({ key, color }) => (
         <BrandLogo key={key} brandKey={key} color={color}
           active={selected === key} onClick={() => onSelect(key)}/>
