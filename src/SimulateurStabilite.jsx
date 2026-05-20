@@ -180,13 +180,13 @@ function BrandLogo({ brandKey, color, active, onClick }) {
       onMouseLeave={() => setHovered(false)}
       style={{
         display: "flex", flexDirection: "column", alignItems: "center",
-        gap: 0, padding: "12px 20px", border: "none", cursor: "pointer",
+        gap: 0, padding: "10px 12px", border: "none", cursor: "pointer",
         background: "transparent",
         borderBottom: active ? `3px solid ${color}` : "3px solid transparent",
         transition: "all 0.18s", flexShrink: 0,
       }}>
       <div style={{
-        width: 360, height: 120,
+        height: 60,
         display: "flex", alignItems: "center", justifyContent: "center",
         overflow: "visible",
         transform: hovered || active ? "scale(1.25)" : "scale(1)",
@@ -195,7 +195,7 @@ function BrandLogo({ brandKey, color, active, onClick }) {
         {!failed ? (
           <img src={src} alt={brandKey} onError={handleError}
             style={{
-              width: "100%", height: "100%", objectFit: "contain",
+              height: "100%", width: "auto", objectFit: "contain",
               filter: (active || hovered) ? "none" : "grayscale(100%)",
               transition: "filter 0.2s",
             }}/>
