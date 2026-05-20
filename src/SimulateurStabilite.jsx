@@ -180,13 +180,13 @@ function BrandLogo({ brandKey, color, active, onClick }) {
       onMouseLeave={() => setHovered(false)}
       style={{
         display: "flex", flexDirection: "column", alignItems: "center",
-        gap: 0, padding: "10px 30px", border: "none", cursor: "pointer",
+        gap: 0, padding: "1vh 2vw", border: "none", cursor: "pointer",
         background: "transparent",
         borderBottom: active ? `3px solid ${color}` : "3px solid transparent",
         transition: "all 0.18s", flexShrink: 0,
       }}>
       <div style={{
-        height: 120,
+        height: "8vh",
         display: "flex", alignItems: "center", justifyContent: "center",
         overflow: "visible",
         transform: hovered || active ? "scale(1.25)" : "scale(1)",
@@ -219,7 +219,7 @@ function BrandBackground({ brandKey, style }) {
 
 function BrandBand({ brands, selected, onSelect }) {
   return (
-    <div style={{ display: "flex", overflowX: "auto", background: "#fff", padding: "0 8px", borderBottom: "1.5px solid #e5e1d8" }}>
+    <div style={{ display: "flex", overflowX: "auto", background: "#fff", padding: "0", borderBottom: "1.5px solid #e5e1d8", justifyContent: "space-around", width: "100%" }}>
       {brands.map(({ key, color }) => (
         <BrandLogo key={key} brandKey={key} color={color}
           active={selected === key} onClick={() => onSelect(key)}/>
