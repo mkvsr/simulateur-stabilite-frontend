@@ -605,22 +605,22 @@ export default function SimulateurStabilite() {
 
               {/* Widget infos à gauche */}
               <div style={{
-                flex: "0 0 280px", marginLeft: 16, zIndex: 2,
+                flex: "0 0 clamp(160px, 22vw, 280px)", marginLeft: 16, zIndex: 2,
                 background: "rgba(255,255,255,0.88)",
                 backdropFilter: "blur(8px)",
-                borderRadius: 16, padding: "20px 22px",
+                borderRadius: 16, padding: "clamp(10px, 1.5vw, 20px) clamp(12px, 1.8vw, 22px)",
                 border: "1px solid rgba(255,255,255,0.95)",
                 boxShadow: "0 4px 20px rgba(0,0,0,0.10)",
               }}>
                 {activeTractor && (
                   <>
-                    <div style={{ marginBottom: 14, borderBottom: `3px solid ${tractorColor}`, paddingBottom: 10 }}>
-                      <div style={{ fontSize: 12, color: "#888", textTransform: "uppercase", letterSpacing: 1, fontWeight: 500 }}>{activeTractor.brand}</div>
-                      <div style={{ fontSize: 20, fontWeight: 700, color: "#1a1a18", lineHeight: 1.2, marginTop: 2 }}>
+                    <div style={{ marginBottom: "clamp(8px, 1vw, 14px)", borderBottom: `3px solid ${tractorColor}`, paddingBottom: "clamp(6px, 0.8vw, 10px)" }}>
+                      <div style={{ fontSize: "clamp(9px, 1vw, 12px)", color: "#888", textTransform: "uppercase", letterSpacing: 1, fontWeight: 500 }}>{activeTractor.brand}</div>
+                      <div style={{ fontSize: "clamp(13px, 1.8vw, 20px)", fontWeight: 700, color: "#1a1a18", lineHeight: 1.2, marginTop: 2 }}>
                         {activeTractor.model || activeTractor.name?.replace(activeTractor.brand + " ", "")}
                       </div>
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "clamp(4px, 0.6vw, 8px)" }}>
                       {[
                         ["Masse à vide", `${activeTractor.mass?.toLocaleString()} kg`],
                         ["Répartition", `${activeTractor.mass_front_pct}% AV / ${activeTractor.mass_rear_pct}% AR`],
@@ -632,8 +632,8 @@ export default function SimulateurStabilite() {
                         ["Vitesse max", activeTractor.dynamics?.max_speed_kmh ? `${activeTractor.dynamics.max_speed_kmh} km/h` : "—"],
                       ].map(([lbl, val]) => (
                         <div key={lbl} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
-                          <span style={{ fontSize: 12, color: "#777", flexShrink: 0 }}>{lbl}</span>
-                          <span style={{ fontSize: 13, fontWeight: 600, color: "#1a1a18", textAlign: "right" }}>{val}</span>
+                          <span style={{ fontSize: "clamp(9px, 1vw, 12px)", color: "#777", flexShrink: 0 }}>{lbl}</span>
+                          <span style={{ fontSize: "clamp(10px, 1.1vw, 13px)", fontWeight: 600, color: "#1a1a18", textAlign: "right" }}>{val}</span>
                         </div>
                       ))}
                     </div>
