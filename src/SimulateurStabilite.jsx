@@ -220,7 +220,13 @@ function BrandBackground({ brandKey, style }) {
 
 function BrandBand({ brands, selected, onSelect }) {
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", background: "#fff", padding: "0", borderBottom: "1.5px solid #e5e1d8", justifyContent: "space-around", width: "100%" }}>
+    <div style={{
+      display: "grid",
+      gridTemplateColumns: `repeat(auto-fit, minmax(clamp(80px, 8vw, 160px), 1fr))`,
+      background: "#fff",
+      borderBottom: "1.5px solid #e5e1d8",
+      width: "100%",
+    }}>
       {brands.map(({ key, color }) => (
         <BrandLogo key={key} brandKey={key} color={color}
           active={selected === key} onClick={() => onSelect(key)}/>
