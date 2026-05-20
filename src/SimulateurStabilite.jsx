@@ -180,13 +180,13 @@ function BrandLogo({ brandKey, color, active, onClick }) {
       onMouseLeave={() => setHovered(false)}
       style={{
         display: "flex", flexDirection: "column", alignItems: "center",
-        gap: 0, padding: "10px 12px", border: "none", cursor: "pointer",
+        gap: 0, padding: "10px 30px", border: "none", cursor: "pointer",
         background: "transparent",
         borderBottom: active ? `3px solid ${color}` : "3px solid transparent",
         transition: "all 0.18s", flexShrink: 0,
       }}>
       <div style={{
-        height: 60,
+        height: 120,
         display: "flex", alignItems: "center", justifyContent: "center",
         overflow: "visible",
         transform: hovered || active ? "scale(1.25)" : "scale(1)",
