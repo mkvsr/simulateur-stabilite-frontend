@@ -25,102 +25,73 @@ const MACHINE_BRANDS = [
 
 const T = {
   fr: {
-    title: "Simulateur de stabilité",
-    tractorBrand: "Marque tracteur",
-    tractorModel: "Modèle tracteur",
-    machineBrand: "Marque machine",
-    machineModel: "Modèle machine",
-    options: "Configuration & lestage",
-    rearTire: "Pneu arrière",
-    frontBallast: "Masse avant",
-    rearBallast: "Masse arrière",
-    wheelARG: "Masse roue AR gauche",
-    wheelARD: "Masse roue AR droite",
-    waterBallast: "Lestage à l'eau",
-    loader: "Chargeur frontal",
-    loaderPos: "Position",
-    loaderSerie: "Chargeur de série",
-    disable: "Désactiver", enable: "Activer",
+    title: "Simulateur de stabilité", sub: "Maneko • v 20",
+    tractorBrand: "Marque tracteur", tractorModel: "Modèle tracteur",
+    machineBrand: "Machine", machineModel: "Modèle machine",
+    options: "Options du tracteur", rearTire: "Pneu arrière",
+    frontBallast: "Masse avant", rearBallast: "Masse arrière",
+    wheelARG: "Masse roue AR gauche", wheelARD: "Masse roue AR droite",
+    frontOffset: "Décalage masse avant (m)", rearOffset: "Décalage masse arrière (m)",
+    waterBallast: "Lestage à l'eau", loader: "Chargeur", loaderPos: "Position",
+    loaderSerie: "Chargeur de série", disable: "Désactiver", enable: "Activer",
     low: "Basse", high: "Haute",
-    results: "Résultats",
-    transport: "Transport", work: "Travail",
-    totalMass: "Masse totale",
-    lateral: "I. latéral", longitudinal: "I. longitudinal", global: "I. global",
+    results: "Résultats", transport: "Transport", work: "Travail",
+    totalMass: "Masse totale", lateral: "L. Latéral", longitudinal: "L. Longitudinal", global: "L. Global",
     fl: "AV G", fr: "AV D", rl: "AR G", rr: "AR D",
-    polygon: "Polygone de sustentation",
-    criteria: "Critères de sécurité",
-    wheelLoads: "Charges aux roues",
-    mass: "Masse", wheelbase: "Empattement",
-    trackFront: "Voie AV", trackRear: "Voie AR",
-    frontPct: "Répart. AV",
+    polygon: "Polygone de sustentation", criteria: "Critères de sécurité",
+    wheelLoads: "Charges aux roues", mass: "Masse", wheelbase: "Empattement",
+    trackFront: "Voie AV", trackRear: "Voie AR", frontPct: "Répart. AV",
     computing: "Calcul...", noResult: "Sélectionnez tracteur + machine",
     noMachineData: "Données à venir",
-    frontOffset: "Décalage masse avant (m)",
-    rearOffset: "Décalage masse arrière (m)",
     environment: "Conditions environnementales",
-    slopeLat: "Pente latérale (°)",
-    slopeLong: "Pente longitudinale (°)",
-    speed: "Vitesse (m/s)",
-    accel: "Accélération longitudinale (m/s²)",
-    turnRadius: "Rayon de virage (m)",
+    slopeLat: "Pente latérale (°)", slopeLong: "Pente longit. (°)",
+    speed: "Vitesse (m/s)", accel: "Accélération (m/s²)", turnRadius: "Rayon virage (m)",
   },
   en: {
-    title: "Stability simulator",
-    tractorBrand: "Tractor brand",
-    tractorModel: "Tractor model",
-    machineBrand: "Machine brand",
-    machineModel: "Machine model",
-    options: "Configuration & ballast",
-    rearTire: "Rear tire",
-    frontBallast: "Front ballast",
-    rearBallast: "Rear ballast",
-    wheelARG: "Wheel weight RL",
-    wheelARD: "Wheel weight RR",
-    waterBallast: "Water ballast",
-    loader: "Front loader",
-    loaderPos: "Position",
-    loaderSerie: "Default loader",
-    disable: "Disable", enable: "Enable",
+    title: "Stability Simulator", sub: "Maneko • v 20",
+    tractorBrand: "Tractor brand", tractorModel: "Tractor model",
+    machineBrand: "Machine", machineModel: "Machine model",
+    options: "Tractor options", rearTire: "Rear tire",
+    frontBallast: "Front ballast", rearBallast: "Rear ballast",
+    wheelARG: "Wheel weight RL", wheelARD: "Wheel weight RR",
+    frontOffset: "Front ballast offset (m)", rearOffset: "Rear ballast offset (m)",
+    waterBallast: "Water ballast", loader: "Loader", loaderPos: "Position",
+    loaderSerie: "Default loader", disable: "Disable", enable: "Enable",
     low: "Low", high: "High",
-    results: "Results",
-    transport: "Transport", work: "Work",
-    totalMass: "Total mass",
-    lateral: "Lateral", longitudinal: "Longitudinal", global: "Global",
+    results: "Results", transport: "Transport", work: "Work",
+    totalMass: "Total mass", lateral: "Lateral", longitudinal: "Longitudinal", global: "Global",
     fl: "FL", fr: "FR", rl: "RL", rr: "RR",
-    polygon: "Stability polygon",
-    criteria: "Safety criteria",
-    wheelLoads: "Wheel loads",
-    mass: "Mass", wheelbase: "Wheelbase",
-    trackFront: "Front track", trackRear: "Rear track",
-    frontPct: "Front dist.",
+    polygon: "Stability polygon", criteria: "Safety criteria",
+    wheelLoads: "Wheel loads", mass: "Mass", wheelbase: "Wheelbase",
+    trackFront: "Front track", trackRear: "Rear track", frontPct: "Front dist.",
     computing: "Computing...", noResult: "Select tractor + machine",
     noMachineData: "Data coming soon",
-    frontOffset: "Front ballast offset (m)",
-    rearOffset: "Rear ballast offset (m)",
     environment: "Environmental conditions",
-    slopeLat: "Lateral slope (°)",
-    slopeLong: "Long. slope (°)",
-    speed: "Speed (m/s)",
-    accel: "Long. acceleration (m/s²)",
-    turnRadius: "Turn radius (m)",
+    slopeLat: "Lateral slope (°)", slopeLong: "Long. slope (°)",
+    speed: "Speed (m/s)", accel: "Acceleration (m/s²)", turnRadius: "Turn radius (m)",
   }
 };
 
-function initials(name) {
-  return name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
+// ── Helpers ────────────────────────────────────────────────────────────────
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `${r}, ${g}, ${b}`;
 }
 
 function indexColor(v, danger, warn) {
-  if (v < 0 || v < danger) return "#A32D2D";
-  if (v < warn) return "#854F0B";
-  return "#3B6D11";
+  if (v < 0 || v < danger) return "#C0392B";
+  if (v < warn) return "#E67E22";
+  return "#27AE60";
 }
 
 function statusColor(status) {
-  if (!status) return { bg: "#f0f0f0", fg: "#888" };
-  if (status.includes("OK")) return { bg: "#EAF3DE", fg: "#3B6D11" };
-  if (status.includes("vert") || status.includes("Avert")) return { bg: "#FAEEDA", fg: "#854F0B" };
-  return { bg: "#FCEBEB", fg: "#A32D2D" };
+  if (!status) return { bg: "rgba(0,0,0,0.05)", fg: "#888" };
+  if (status.includes("OK")) return { bg: "rgba(39,174,96,0.12)", fg: "#27AE60" };
+  if (status.includes("vert") || status.includes("Avert")) return { bg: "rgba(230,126,34,0.12)", fg: "#E67E22" };
+  return { bg: "rgba(192,57,43,0.12)", fg: "#C0392B" };
 }
 
 function getLoaderCategory(mass) {
@@ -133,254 +104,75 @@ function getLoaderCategory(mass) {
   return "FL5033";
 }
 
-function ToggleOption({ label, active, onToggle, children }) {
+// ── Glass card ─────────────────────────────────────────────────────────────
+
+function Glass({ children, style = {}, onClick }) {
   return (
-    <div style={{ marginBottom: 16 }}>
-      <div style={{ fontSize: 13, fontWeight: 500, color: "#333", marginBottom: 8 }}>{label}</div>
-      <div style={{ display: "flex", borderRadius: 10, overflow: "hidden", border: "1.5px solid #e0ddd8" }}>
-        <button onClick={() => onToggle(false)} style={{
-          flex: 1, padding: "10px 0", border: "none", fontSize: 13, cursor: "pointer",
-          background: !active ? "#1a1a18" : "#fafaf8",
-          color: !active ? "#fff" : "#aaa",
-          fontWeight: !active ? 600 : 400, transition: "all 0.18s",
-        }}>Désactiver</button>
-        <button onClick={() => onToggle(true)} style={{
-          flex: 1, padding: "10px 0", border: "none", fontSize: 13, cursor: "pointer",
-          background: active ? "#1a1a18" : "#fafaf8",
-          color: active ? "#fff" : "#aaa",
-          fontWeight: active ? 600 : 400, transition: "all 0.18s",
-          borderLeft: "1.5px solid #e0ddd8",
-        }}>Activer</button>
-      </div>
-      {active && (
-        <div style={{ marginTop: 2, padding: "12px 14px", background: "#f9f8f5", borderRadius: "0 0 10px 10px", border: "1.5px solid #e0ddd8", borderTop: "none" }}>
-          {children}
-        </div>
-      )}
+    <div onClick={onClick} style={{
+      background: "rgba(255,255,255,0.22)",
+      backdropFilter: "blur(24px) saturate(180%)",
+      WebkitBackdropFilter: "blur(24px) saturate(180%)",
+      borderRadius: 24,
+      border: "1px solid rgba(255,255,255,0.45)",
+      boxShadow: "0 8px 32px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.6)",
+      ...style,
+    }}>
+      {children}
     </div>
   );
 }
 
-function BrandLogo({ brandKey, color, active, onClick }) {
-  const [src, setSrc] = useState(`/logos/${brandKey}.webp`);
+// ── TractorImage ───────────────────────────────────────────────────────────
+
+function TractorImage({ tractorKey, color, style = {} }) {
+  const [src, setSrc] = useState(`/tractors/${tractorKey}.webp`);
   const [failed, setFailed] = useState(false);
-  const [hovered, setHovered] = useState(false);
-
   const handleError = () => {
-    if (src.endsWith(".webp")) {
-      setSrc(`/logos/${brandKey}.png`);
-    } else {
-      setFailed(true);
-    }
+    if (src.endsWith(".webp")) setSrc(`/tractors/${tractorKey}.png`);
+    else setFailed(true);
   };
-
-  return (
-    <button onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        display: "flex", flexDirection: "column", alignItems: "center",
-        gap: 0, padding: "1vh 2vw", border: "none", cursor: "pointer",
-        background: "transparent",
-        borderBottom: active ? `3px solid ${color}` : "3px solid transparent",
-        transition: "all 0.18s", flexShrink: 0,
-        minWidth: "calc(4vh + 4vw)",
-      }}>
-      <div style={{
-        height: "clamp(40px, 6vw, 80px)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        overflow: "visible",
-        transform: hovered || active ? "scale(1.25)" : "scale(1)",
-        transition: "transform 0.18s",
-      }}>
-        {!failed ? (
-          <img src={src} alt={brandKey} onError={handleError}
-            style={{
-              height: "100%", width: "auto", objectFit: "contain",
-              filter: (active || hovered) ? "none" : "grayscale(100%)",
-              transition: "filter 0.2s",
-            }}/>
-        ) : (
-          <span style={{ fontWeight: 700, fontSize: 20, color: active || hovered ? color : "#999" }}>
-            {initials(brandKey)}
-          </span>
-        )}
-      </div>
-    </button>
+  if (failed) return (
+    <svg width="100%" height="160" viewBox="0 0 360 160" fill="none">
+      <rect x="90" y="50" width="180" height="80" rx="10" fill={color} opacity=".1"/>
+      <rect x="100" y="60" width="100" height="60" rx="8" fill={color} opacity=".2"/>
+      <circle cx="76" cy="112" r="38" stroke={color} strokeWidth="6" fill="none"/>
+      <circle cx="280" cy="116" r="30" stroke={color} strokeWidth="6" fill="none"/>
+    </svg>
   );
+  return <img src={src} alt={tractorKey} onError={handleError}
+    style={{ height: "100%", width: "auto", objectFit: "contain", display: "block", ...style }}/>;
 }
+
+// ── BrandBackground ────────────────────────────────────────────────────────
 
 function BrandBackground({ brandKey, style }) {
   const [src, setSrc] = useState(`/brands/${brandKey}.webp`);
   const handleError = () => {
     if (src.endsWith(".webp")) setSrc(`/brands/${brandKey}.png`);
   };
-  return <img src={src} alt={brandKey} onError={handleError} style={{ width: "100%", display: "block", ...style }}/>;
+  return <img src={src} alt={brandKey} onError={handleError}
+    style={{ width: "100%", display: "block", ...style }}/>;
 }
 
-function BrandBand({ brands, selected, onSelect }) {
-  return (
-    <div style={{
-      display: "grid",
-      gridTemplateColumns: `repeat(auto-fit, minmax(clamp(80px, 8vw, 160px), 1fr))`,
-      background: "#fff",
-      borderBottom: "1.5px solid #e5e1d8",
-      width: "100%",
-    }}>
-      {brands.map(({ key, color }) => (
-        <BrandLogo key={key} brandKey={key} color={color}
-          active={selected === key} onClick={() => onSelect(key)}/>
-      ))}
-    </div>
-  );
-}
-
-function TractorImage({ tractorKey, color, style = {} }) {
-  const [src, setSrc] = useState(`/tractors/${tractorKey}.webp`);
-  const [failed, setFailed] = useState(false);
-
-  const handleError = () => {
-    if (src.endsWith(".webp")) {
-      setSrc(`/tractors/${tractorKey}.png`);
-    } else {
-      setFailed(true);
-    }
-  };
-
-  if (failed) return <TractorSVG color={color}/>;
-  return (
-    <img src={src} alt={tractorKey} onError={handleError}
-      style={{ height: 220, width: "auto", maxWidth: "100%", objectFit: "contain", display: "block", ...style }}/>
-  );
-}
-
-function TractorSVG({ color }) {
-  return (
-    <svg width="100%" height="160" viewBox="0 0 360 160" fill="none">
-      <rect x="90" y="50" width="180" height="80" rx="10" fill={color} opacity=".1"/>
-      <rect x="100" y="60" width="100" height="60" rx="8" fill={color} opacity=".2"/>
-      <rect x="210" y="68" width="54" height="44" rx="5" fill={color} opacity=".35"/>
-      <rect x="264" y="78" width="26" height="28" rx="3" fill={color} opacity=".25"/>
-      <circle cx="76" cy="112" r="38" stroke={color} strokeWidth="6" fill="none"/>
-      <circle cx="76" cy="112" r="15" fill={color} opacity=".3"/>
-      <circle cx="280" cy="116" r="30" stroke={color} strokeWidth="6" fill="none"/>
-      <circle cx="280" cy="116" r="12" fill={color} opacity=".3"/>
-      <rect x="38" y="109" width="300" height="7" rx="3" fill={color} opacity=".08"/>
-      <rect x="90" y="55" width="34" height="22" rx="5" fill={color} opacity=".45"/>
-      <rect x="264" y="78" width="22" height="8" rx="2" fill={color} opacity=".35"/>
-    </svg>
-  );
-}
-
-function MachineSVG({ color }) {
-  return (
-    <svg width="100%" height="160" viewBox="0 0 360 160" fill="none">
-      <rect x="60" y="45" width="240" height="70" rx="10" fill={color} opacity=".1"/>
-      <rect x="70" y="55" width="220" height="50" rx="8" fill={color} opacity=".18"/>
-      <rect x="50" y="90" width="260" height="24" rx="6" fill={color} opacity=".3"/>
-      <rect x="40" y="108" width="280" height="10" rx="5" fill={color} opacity=".45"/>
-      <circle cx="90" cy="128" r="16" stroke={color} strokeWidth="3.5" fill="none"/>
-      <circle cx="180" cy="128" r="16" stroke={color} strokeWidth="3.5" fill="none"/>
-      <circle cx="270" cy="128" r="16" stroke={color} strokeWidth="3.5" fill="none"/>
-      <rect x="60" y="40" width="18" height="60" rx="5" fill={color} opacity=".28"/>
-      <rect x="282" y="40" width="18" height="60" rx="5" fill={color} opacity=".28"/>
-    </svg>
-  );
-}
-
-function InfoGrid({ items }) {
-  return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(110px, 1fr))", gap: "10px 20px", padding: "14px 0 4px" }}>
-      {items.map(([lbl, val]) => (
-        <div key={lbl}>
-          <div style={{ fontSize: 10, color: "#aaa", marginBottom: 2 }}>{lbl}</div>
-          <div style={{ fontSize: 14, fontWeight: 500, color: "#1a1a18" }}>{val}</div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function Dots({ total, current, onSelect, color }) {
-  if (total <= 1) return null;
-  return (
-    <div style={{ display: "flex", justifyContent: "center", gap: 6, margin: "10px 0 4px" }}>
-      {Array.from({ length: total }).map((_, i) => (
-        <div key={i} onClick={() => onSelect(i)} style={{
-          height: 6, borderRadius: 3, cursor: "pointer",
-          width: i === current ? 20 : 6,
-          background: i === current ? color : "#ddd",
-          transition: "all 0.2s",
-        }}/>
-      ))}
-    </div>
-  );
-}
-
-function SliderField({ label, value, onChange, min = 0, max, step = 50, unit = "kg" }) {
-  return (
-    <div style={{ marginBottom: 16 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-        <span style={{ fontSize: 13, color: "#555" }}>{label}</span>
-        <span style={{ fontSize: 13, fontWeight: 500, color: "#1a1a18" }}>{value} {unit}</span>
-      </div>
-      <input type="range" min={min} max={max} step={step} value={value}
-        onChange={e => onChange(Number(e.target.value))}
-        style={{ width: "100%", accentColor: "#3B6D11", cursor: "pointer" }}/>
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 2 }}>
-        <span style={{ fontSize: 10, color: "#ccc" }}>{min}</span>
-        <span style={{ fontSize: 10, color: "#ccc" }}>{max}</span>
-      </div>
-    </div>
-  );
-}
+// ── Gauge ──────────────────────────────────────────────────────────────────
 
 function Gauge({ label, value, danger, warn }) {
   const pct = Math.max(0, Math.min(1, value));
   const color = indexColor(value, danger, warn);
-  const bg = { "#A32D2D": "#FCEBEB", "#854F0B": "#FAEEDA", "#3B6D11": "#EAF3DE" }[color] || "#f5f5f5";
   return (
-    <div style={{ flex: 1, background: bg, borderRadius: 12, padding: "12px 16px" }}>
-      <div style={{ fontSize: 11, color: "#888", marginBottom: 4 }}>{label}</div>
-      <div style={{ fontSize: 22, fontWeight: 700, color, marginBottom: 8 }}>{value.toFixed(3)}</div>
-      <div style={{ height: 5, borderRadius: 3, background: color + "30" }}>
-        <div style={{ height: "100%", width: `${pct * 100}%`, background: color, borderRadius: 3, transition: "width 0.5s cubic-bezier(.4,0,.2,1)" }}/>
+    <div style={{ flex: 1 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+        <span style={{ fontSize: 11, color: "rgba(0,0,0,0.45)", fontWeight: 500 }}>{label}</span>
+        <span style={{ fontSize: 16, fontWeight: 700, color }}>{value.toFixed(2)}</span>
+      </div>
+      <div style={{ height: 4, borderRadius: 2, background: "rgba(0,0,0,0.08)" }}>
+        <div style={{ height: "100%", width: `${pct * 100}%`, background: color, borderRadius: 2, transition: "width 0.5s cubic-bezier(.4,0,.2,1)" }}/>
       </div>
     </div>
   );
 }
 
-function WheelGrid({ loads, total, t }) {
-  const { FL, FR, RL, RR } = loads;
-  const wc = v => (v / total) > 0.4 ? "#A32D2D" : (v / total) > 0.35 ? "#854F0B" : "#3B6D11";
-  const wb = v => ({ "#A32D2D": "#FCEBEB", "#854F0B": "#FAEEDA", "#3B6D11": "#EAF3DE" })[wc(v)];
-  const Wheel = ({ val, label }) => (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
-      <div style={{
-        width: 70, height: 70, borderRadius: 12, background: wb(val),
-        border: `2.5px solid ${wc(val)}`,
-        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-      }}>
-        <span style={{ fontSize: 15, fontWeight: 700, color: wc(val) }}>{Math.round(val)}</span>
-        <span style={{ fontSize: 10, color: "#aaa" }}>kg</span>
-      </div>
-      <span style={{ fontSize: 11, color: "#888" }}>{label}</span>
-    </div>
-  );
-  return (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 60px 1fr", gap: 8, alignItems: "center", maxWidth: 280, margin: "0 auto" }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-        <Wheel val={FL} label={t.fl}/>
-        <Wheel val={RL} label={t.rl}/>
-      </div>
-      <div style={{ height: 110, border: "1.5px solid #e5e1d8", borderRadius: 10, background: "#fafaf8" }}/>
-      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-        <Wheel val={FR} label={t.fr}/>
-        <Wheel val={RR} label={t.rr}/>
-      </div>
-    </div>
-  );
-}
+// ── PolygonView ────────────────────────────────────────────────────────────
 
 function PolygonView({ result, mode, tractorGeom }) {
   if (!result || !tractorGeom) return null;
@@ -400,41 +192,121 @@ function PolygonView({ result, mode, tractorGeom }) {
   const pts = [[L/2,TF/2],[L/2,-TF/2],[-L/2,-TR/2],[-L/2,TR/2]];
   const svgPts = pts.map(([x,y]) => `${tx(x).toFixed(1)},${ty(y).toFixed(1)}`).join(" ");
   const ist = st.I_static;
-  const pc = ist < 0 ? "#A32D2D" : ist < 0.4 ? "#A32D2D" : ist < 0.5 ? "#854F0B" : "#3B6D11";
+  const pc = ist < 0 ? "#C0392B" : ist < 0.4 ? "#C0392B" : ist < 0.5 ? "#E67E22" : "#27AE60";
   return (
     <svg width="100%" viewBox={`0 0 ${W} ${H}`}>
-      <polygon points={svgPts} fill={`${pc}10`} stroke={pc} strokeWidth="1.5" strokeDasharray="6 3"/>
+      <polygon points={svgPts} fill={`${pc}12`} stroke={pc} strokeWidth="1.5" strokeDasharray="6 3"/>
       {pts.map(([x,y],i) => <circle key={i} cx={tx(x)} cy={ty(y)} r={5} fill={pc}/>)}
-      <line x1={cx} y1={PAD/2} x2={cx} y2={H-PAD/2} stroke="#eee" strokeWidth="0.5" strokeDasharray="4 4"/>
-      <line x1={PAD/2} y1={cy} x2={W-PAD/2} y2={cy} stroke="#eee" strokeWidth="0.5" strokeDasharray="4 4"/>
-      <circle cx={tx(XG)} cy={ty(YG)} r={10} fill={pc} opacity="0.2"/>
-      <circle cx={tx(XG)} cy={ty(YG)} r={6} fill={pc}/>
-      <circle cx={tx(XG)} cy={ty(YG)} r={2.5} fill="#fff"/>
-      <text x={tx(L/2)+8} y={cy+4} fontSize="10" fill="#bbb">AV</text>
-      <text x={tx(-L/2)-24} y={cy+4} fontSize="10" fill="#bbb">AR</text>
-      <text x={tx(XG)} y={ty(YG)-16} fontSize="9" fill={pc} textAnchor="middle" fontWeight="600">
+      <line x1={cx} y1={PAD/2} x2={cx} y2={H-PAD/2} stroke="rgba(0,0,0,0.08)" strokeWidth="1" strokeDasharray="4 4"/>
+      <line x1={PAD/2} y1={cy} x2={W-PAD/2} y2={cy} stroke="rgba(0,0,0,0.08)" strokeWidth="1" strokeDasharray="4 4"/>
+      <circle cx={tx(XG)} cy={ty(YG)} r={12} fill={pc} opacity="0.15"/>
+      <circle cx={tx(XG)} cy={ty(YG)} r={7} fill={pc}/>
+      <circle cx={tx(XG)} cy={ty(YG)} r={3} fill="#fff"/>
+      <text x={tx(L/2)+8} y={cy+4} fontSize="10" fill="rgba(0,0,0,0.3)">AV</text>
+      <text x={tx(-L/2)-24} y={cy+4} fontSize="10" fill="rgba(0,0,0,0.3)">AR</text>
+      <text x={tx(XG)} y={ty(YG)-18} fontSize="9" fill={pc} textAnchor="middle" fontWeight="600">
         ({XG.toFixed(2)}, {YG.toFixed(2)})
       </text>
     </svg>
   );
 }
 
-function StickyBar({ result, mode, t, onModeChange }) {
+// ── WheelGrid ──────────────────────────────────────────────────────────────
+
+function WheelGrid({ loads, total, t }) {
+  const { FL, FR, RL, RR } = loads;
+  const wc = v => (v / total) > 0.4 ? "#C0392B" : (v / total) > 0.35 ? "#E67E22" : "#27AE60";
+  const Wheel = ({ val, label }) => (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
+      <div style={{
+        width: 68, height: 68, borderRadius: 18,
+        background: `rgba(${hexToRgb(wc(val))}, 0.1)`,
+        border: `2px solid ${wc(val)}40`,
+        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+      }}>
+        <span style={{ fontSize: 16, fontWeight: 700, color: wc(val) }}>{Math.round(val)}</span>
+        <span style={{ fontSize: 10, color: "rgba(0,0,0,0.35)" }}>kg</span>
+      </div>
+      <span style={{ fontSize: 11, color: "rgba(0,0,0,0.4)" }}>{label}</span>
+    </div>
+  );
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 56px 1fr", gap: 8, alignItems: "center", maxWidth: 280, margin: "0 auto" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+        <Wheel val={FL} label={t.fl}/><Wheel val={RL} label={t.rl}/>
+      </div>
+      <div style={{ height: 110, border: "1.5px solid rgba(0,0,0,0.06)", borderRadius: 12, background: "rgba(0,0,0,0.02)" }}/>
+      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+        <Wheel val={FR} label={t.fr}/><Wheel val={RR} label={t.rr}/>
+      </div>
+    </div>
+  );
+}
+
+// ── SliderField ────────────────────────────────────────────────────────────
+
+function SliderField({ label, value, onChange, min = 0, max, step = 50, unit = "kg", accentColor = "#27AE60" }) {
+  return (
+    <div style={{ marginBottom: 16 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
+        <span style={{ fontSize: 13, color: "rgba(0,0,0,0.5)" }}>{label}</span>
+        <span style={{ fontSize: 13, fontWeight: 600, color: "rgba(0,0,0,0.7)" }}>{value} {unit}</span>
+      </div>
+      <input type="range" min={min} max={max} step={step} value={value}
+        onChange={e => onChange(Number(e.target.value))}
+        style={{ width: "100%", accentColor, cursor: "pointer" }}/>
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 2 }}>
+        <span style={{ fontSize: 10, color: "rgba(0,0,0,0.2)" }}>{min}</span>
+        <span style={{ fontSize: 10, color: "rgba(0,0,0,0.2)" }}>{max}</span>
+      </div>
+    </div>
+  );
+}
+
+// ── ToggleOption ───────────────────────────────────────────────────────────
+
+function ToggleOption({ label, active, onToggle, children, color = "#27AE60" }) {
+  return (
+    <div style={{ marginBottom: 14 }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: active ? 10 : 0 }}>
+        <span style={{ fontSize: 14, fontWeight: 500, color: "rgba(0,0,0,0.6)" }}>{label}</span>
+        <div style={{ display: "flex", borderRadius: 20, overflow: "hidden", border: "1px solid rgba(0,0,0,0.1)" }}>
+          {[false, true].map(v => (
+            <button key={String(v)} onClick={() => onToggle(v)} style={{
+              padding: "5px 14px", border: "none", fontSize: 12, cursor: "pointer",
+              background: active === v ? (v ? color : "rgba(0,0,0,0.7)") : "rgba(255,255,255,0.5)",
+              color: active === v ? "#fff" : "rgba(0,0,0,0.4)",
+              fontWeight: active === v ? 600 : 400, transition: "all 0.18s",
+            }}>{v ? "Activer" : "Désactiver"}</button>
+          ))}
+        </div>
+      </div>
+      {active && <div style={{ paddingTop: 4 }}>{children}</div>}
+    </div>
+  );
+}
+
+// ── StickyBar ──────────────────────────────────────────────────────────────
+
+function StickyBar({ result, mode, t, onModeChange, brandColor }) {
   const st = result ? result[`static_${mode}`] : null;
   const cg = result ? result[mode === "transport" ? "transport" : "work"] : null;
+  const rgb = hexToRgb(brandColor || "#333");
   return (
     <div style={{
       position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 100,
-      background: "#1a1a18", borderTop: "2px solid #2a2a28",
-      padding: "10px 20px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
+      background: `rgba(${rgb}, 0.85)`,
+      backdropFilter: "blur(30px) saturate(180%)",
+      WebkitBackdropFilter: "blur(30px) saturate(180%)",
+      borderTop: "1px solid rgba(255,255,255,0.2)",
+      padding: "10px 24px", display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap",
     }}>
-      <div style={{ display: "flex", borderRadius: 8, overflow: "hidden", border: "1.5px solid #333", flexShrink: 0 }}>
+      <div style={{ display: "flex", borderRadius: 20, overflow: "hidden", border: "1px solid rgba(255,255,255,0.25)", flexShrink: 0 }}>
         {["transport", "work"].map(m => (
           <button key={m} onClick={() => onModeChange(m)} style={{
-            padding: "6px 14px", border: "none", fontSize: 12, cursor: "pointer",
-            background: mode === m ? "#3B6D11" : "transparent",
-            color: mode === m ? "#fff" : "#555",
-            fontWeight: mode === m ? 600 : 400, transition: "all 0.15s",
+            padding: "6px 16px", border: "none", fontSize: 12, cursor: "pointer",
+            background: mode === m ? "rgba(255,255,255,0.3)" : "transparent",
+            color: "#fff", fontWeight: mode === m ? 700 : 400, transition: "all 0.18s",
           }}>
             {m === "transport" ? t.transport : t.work}
           </button>
@@ -443,37 +315,55 @@ function StickyBar({ result, mode, t, onModeChange }) {
 
       {cg && (
         <div style={{ flexShrink: 0 }}>
-          <span style={{ fontSize: 10, color: "#555" }}>{t.totalMass} </span>
-          <span style={{ fontSize: 17, fontWeight: 700, color: "#fff" }}>{Math.round(cg.mass_total).toLocaleString()} kg</span>
+          <span style={{ fontSize: 10, color: "rgba(255,255,255,0.6)", textTransform: "uppercase", letterSpacing: 1 }}>{t.totalMass} </span>
+          <span style={{ fontSize: 18, fontWeight: 700, color: "#fff" }}>{Math.round(cg.mass_total).toLocaleString()} kg</span>
         </div>
       )}
 
       {st && (
-        <div style={{ display: "flex", gap: 16, flex: 1, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", gap: 20, flex: 1, flexWrap: "wrap" }}>
           {[[t.lateral, st.I_lat, 0.4, 0.5],[t.longitudinal, st.I_long, 0.5, 0.6],[t.global, st.I_static, 0.4, 0.5]].map(([lbl, val, d, w]) => {
             const col = indexColor(val, d, w);
             return (
-              <div key={lbl} style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <div style={{ width: 8, height: 8, borderRadius: "50%", background: col }}/>
-                <span style={{ fontSize: 10, color: "#555" }}>{lbl}</span>
-                <span style={{ fontSize: 15, fontWeight: 700, color: col }}>{val.toFixed(2)}</span>
+              <div key={lbl} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <div style={{ width: 8, height: 8, borderRadius: "50%", background: col, boxShadow: `0 0 6px ${col}` }}/>
+                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.7)", textTransform: "uppercase", letterSpacing: 0.5 }}>{lbl}</span>
+                <span style={{ fontSize: 17, fontWeight: 700, color: "#fff" }}>{val.toFixed(2)}</span>
               </div>
             );
           })}
         </div>
       )}
 
-      {!result && <span style={{ fontSize: 12, color: "#555", flex: 1 }}>{t.noResult}</span>}
+      {!result && <span style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", flex: 1 }}>{t.noResult}</span>}
 
       {result && (
-        <div style={{ display: "flex", gap: 5, flexShrink: 0 }}>
+        <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
           {result.compatibility.map((c, i) => {
             const ok = c.status.includes("OK");
             const warn = c.status.includes("vert") || c.status.includes("Avert");
-            return <div key={i} style={{ width: 9, height: 9, borderRadius: "50%", background: ok ? "#3B6D11" : warn ? "#854F0B" : "#A32D2D" }}/>;
+            return <div key={i} style={{ width: 8, height: 8, borderRadius: "50%", background: ok ? "#27AE60" : warn ? "#E67E22" : "#C0392B" }}/>;
           })}
         </div>
       )}
+    </div>
+  );
+}
+
+// ── Dots ───────────────────────────────────────────────────────────────────
+
+function Dots({ total, current, onSelect, color }) {
+  if (total <= 1) return null;
+  return (
+    <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 12 }}>
+      {Array.from({ length: total }).map((_, i) => (
+        <div key={i} onClick={() => onSelect(i)} style={{
+          height: 6, borderRadius: 3, cursor: "pointer",
+          width: i === current ? 20 : 6,
+          background: i === current ? color : "rgba(0,0,0,0.15)",
+          transition: "all 0.2s",
+        }}/>
+      ))}
     </div>
   );
 }
@@ -538,8 +428,7 @@ export default function SimulateurStabilite() {
       setComputing(true);
       try {
         const res = await fetch(`${API_URL}/simulate`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+          method: "POST", headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ tractor_name: tractor.key, machine_name: machine.key, options, environment: env }),
         });
         if (res.ok) setResult(await res.json());
@@ -552,72 +441,101 @@ export default function SimulateurStabilite() {
 
   const goTractorPrev = () => setTractorIdx(i => Math.max(0, i - 1));
   const goTractorNext = () => setTractorIdx(i => Math.min(tractorList.length - 1, i + 1));
+  const goMachinePrev = () => setMachineIdx(i => Math.max(0, i - 1));
+  const goMachineNext = () => setMachineIdx(i => Math.min(machineList.length - 1, i + 1));
 
   const activeTractor = tractorList[tractorIdx];
   const activeMachine = machineList[machineIdx];
-  const tractorColor = TRACTOR_BRANDS.find(b => b.key === tractorBrand)?.color || "#3B6D11";
+  const tractorColor = TRACTOR_BRANDS.find(b => b.key === tractorBrand)?.color || "#27AE60";
   const machineColor = MACHINE_BRANDS.find(b => b.key === machineBrand)?.color || "#1A5276";
+  const tractorRgb = hexToRgb(tractorColor);
+  const machineRgb = hexToRgb(machineColor);
 
-  const Section = ({ label, children, bg = "#fff" }) => (
-    <div style={{ background: bg, borderBottom: "1.5px solid #e5e1d8" }}>
-      <div style={{ padding: "10px 24px 0", fontSize: 10, fontWeight: 600, color: "#aaa", textTransform: "uppercase", letterSpacing: 1 }}>
-        {label}
-      </div>
-      {children}
-    </div>
+  const ArrowBtn = ({ onClick, disabled, dir }) => (
+    <button onClick={onClick} disabled={disabled} style={{
+      width: 40, height: 40, borderRadius: "50%", border: "none",
+      background: disabled ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.7)",
+      backdropFilter: "blur(10px)", cursor: disabled ? "not-allowed" : "pointer",
+      fontSize: 20, color: disabled ? "rgba(0,0,0,0.2)" : "rgba(0,0,0,0.6)",
+      display: "flex", alignItems: "center", justifyContent: "center",
+      boxShadow: disabled ? "none" : "0 2px 12px rgba(0,0,0,0.12)",
+      flexShrink: 0, transition: "all 0.18s",
+    }}>{dir === "prev" ? "‹" : "›"}</button>
   );
 
   return (
-    <div style={{ background: "#f5f3ee", minHeight: "100vh", paddingBottom: 80 }}>
+    <div style={{
+      fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif",
+      minHeight: "100vh",
+      background: tractorBrand
+        ? `radial-gradient(ellipse at 30% 20%, rgba(${tractorRgb}, 0.35) 0%, transparent 60%), radial-gradient(ellipse at 70% 80%, rgba(${tractorRgb}, 0.2) 0%, transparent 60%), #f0f0f0`
+        : "#f0f0f0",
+      transition: "background 0.6s ease",
+      paddingBottom: 80,
+    }}>
 
       {/* HEADER */}
-      <div style={{ background: "#fff", padding: "20px 24px 16px", borderBottom: "1.5px solid #e5e1d8", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div style={{ padding: "20px 28px 16px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div>
-          <div style={{ fontSize: 26, fontWeight: 700, color: "#1a1a18", letterSpacing: -0.5 }}>Simulateur de stabilité</div>
-          <div style={{ fontSize: 11, color: "#aaa", marginTop: 2 }}>Maneko — v20</div>
+          <h1 style={{ fontSize: 28, fontWeight: 700, color: "rgba(0,0,0,0.85)", margin: 0, letterSpacing: -0.5 }}>{t.title}</h1>
+          <p style={{ fontSize: 12, color: "rgba(0,0,0,0.35)", margin: 0, marginTop: 2 }}>{t.sub}</p>
         </div>
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-          {computing && <span style={{ fontSize: 11, color: "#aaa", fontStyle: "italic" }}>{t.computing}</span>}
+          {computing && <span style={{ fontSize: 11, color: "rgba(0,0,0,0.35)", fontStyle: "italic" }}>{t.computing}</span>}
           <button onClick={() => setLang(l => l === "fr" ? "en" : "fr")} style={{
-            padding: "6px 14px", borderRadius: 8, border: "1.5px solid #e0ddd8",
-            background: "#fafaf8", color: "#555", fontSize: 12, cursor: "pointer", fontWeight: 500,
+            padding: "6px 16px", borderRadius: 20,
+            background: "rgba(255,255,255,0.6)", backdropFilter: "blur(10px)",
+            border: "1px solid rgba(255,255,255,0.5)", color: "rgba(0,0,0,0.6)",
+            fontSize: 12, fontWeight: 600, cursor: "pointer",
           }}>{lang === "fr" ? "EN" : "FR"}</button>
         </div>
       </div>
 
-      {/* MARQUES TRACTEUR */}
-      <div>
-        <div style={{ padding: "10px 20px 0", fontSize: 10, fontWeight: 600, color: "#aaa", textTransform: "uppercase", letterSpacing: 1, background: "#fff" }}>
-          {t.tractorBrand}
-        </div>
-        <BrandBand brands={TRACTOR_BRANDS} selected={tractorBrand} onSelect={setTractorBrand}/>
-      </div>
+      <div style={{ padding: "0 20px", display: "flex", flexDirection: "column", gap: 16 }}>
 
-      {/* MODÈLE TRACTEUR */}
-      {tractorBrand && (
-        <Section label={t.tractorModel} bg="#fff">
-          {tractorList.length > 0 ? (
-          <div style={{ position: "relative", overflow: "hidden" }}>
-            {/* Image de fond pleine largeur — proportions préservées */}
-            <BrandBackground brandKey={tractorBrand}/>
-            {/* Contenu par dessus */}
-            <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", padding: "0 24px" }}>
+        {/* BANDEAU MARQUES TRACTEUR */}
+        <Glass style={{ padding: "6px 8px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: `repeat(auto-fit, minmax(clamp(60px, 8vw, 120px), 1fr))`, width: "100%" }}>
+            {TRACTOR_BRANDS.map(({ key, color }) => {
+              const active = tractorBrand === key;
+              return (
+                <button key={key} onClick={() => setTractorBrand(key)} style={{
+                  padding: "8px 4px", border: "none", cursor: "pointer",
+                  background: active ? color : "transparent",
+                  borderRadius: 16, transition: "all 0.2s",
+                  color: active ? "#fff" : "rgba(0,0,0,0.5)",
+                  fontSize: "clamp(9px, 1vw, 12px)", fontWeight: active ? 700 : 500,
+                  letterSpacing: 0.3, textAlign: "center",
+                }}>
+                  {key.toUpperCase()}
+                </button>
+              );
+            })}
+          </div>
+        </Glass>
 
-              {/* Widget infos à gauche */}
-              <div style={{
-                flex: "0 0 clamp(160px, 22vw, 280px)", marginLeft: 16, zIndex: 2,
-                background: "rgba(255,255,255,0.88)",
-                backdropFilter: "blur(8px)",
-                borderRadius: 16, padding: "clamp(10px, 1.5vw, 20px) clamp(12px, 1.8vw, 22px)",
-                border: "1px solid rgba(255,255,255,0.95)",
-                boxShadow: "0 4px 20px rgba(0,0,0,0.10)",
+        {/* SECTION TRACTEUR */}
+        {tractorBrand && (
+          <div style={{ position: "relative", borderRadius: 24, overflow: "hidden", minHeight: 280 }}>
+            {/* Fond de marque */}
+            <BrandBackground brandKey={tractorBrand} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}/>
+            {/* Overlay gradient marque */}
+            <div style={{
+              position: "absolute", inset: 0,
+              background: `linear-gradient(135deg, rgba(${tractorRgb}, 0.15) 0%, rgba(${tractorRgb}, 0.05) 100%)`,
+            }}/>
+            <div style={{ position: "relative", display: "flex", alignItems: "center", padding: "24px 20px", minHeight: 280 }}>
+              {/* Widget infos */}
+              <Glass style={{
+                flex: `0 0 clamp(160px, 22vw, 280px)`, marginLeft: 8, zIndex: 2,
+                padding: "clamp(12px, 1.5vw, 20px) clamp(14px, 1.8vw, 22px)",
               }}>
                 {activeTractor && (
                   <>
-                    <div style={{ marginBottom: "clamp(8px, 1vw, 14px)", borderBottom: `3px solid ${tractorColor}`, paddingBottom: "clamp(6px, 0.8vw, 10px)" }}>
-                      <div style={{ fontSize: "clamp(9px, 1vw, 12px)", color: "#888", textTransform: "uppercase", letterSpacing: 1, fontWeight: 500 }}>{activeTractor.brand}</div>
-                      <div style={{ fontSize: "clamp(13px, 1.8vw, 20px)", fontWeight: 700, color: "#1a1a18", lineHeight: 1.2, marginTop: 2 }}>
-                        {activeTractor.model || activeTractor.name?.replace(activeTractor.brand + " ", "")}
+                    <div style={{ marginBottom: 12, borderBottom: `2px solid ${tractorColor}`, paddingBottom: 10 }}>
+                      <div style={{ fontSize: "clamp(9px, 1vw, 11px)", color: tractorColor, textTransform: "uppercase", letterSpacing: 1.5, fontWeight: 700 }}>{activeTractor.brand}</div>
+                      <div style={{ fontSize: "clamp(14px, 2vw, 22px)", fontWeight: 700, color: "rgba(0,0,0,0.85)", lineHeight: 1.2, marginTop: 3 }}>
+                        {activeTractor.model}
                       </div>
                     </div>
                     <div style={{ display: "flex", flexDirection: "column", gap: "clamp(4px, 0.6vw, 8px)" }}>
@@ -631,268 +549,250 @@ export default function SimulateurStabilite() {
                         ["Pneu AR", activeTractor.tire_defaults?.rear || "—"],
                         ["Vitesse max", activeTractor.dynamics?.max_speed_kmh ? `${activeTractor.dynamics.max_speed_kmh} km/h` : "—"],
                       ].map(([lbl, val]) => (
-                        <div key={lbl} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
-                          <span style={{ fontSize: "clamp(9px, 1vw, 12px)", color: "#777", flexShrink: 0 }}>{lbl}</span>
-                          <span style={{ fontSize: "clamp(10px, 1.1vw, 13px)", fontWeight: 600, color: "#1a1a18", textAlign: "right" }}>{val}</span>
+                        <div key={lbl} style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
+                          <span style={{ fontSize: "clamp(9px, 1vw, 12px)", color: "rgba(0,0,0,0.4)" }}>{lbl}</span>
+                          <span style={{ fontSize: "clamp(10px, 1.1vw, 13px)", fontWeight: 600, color: "rgba(0,0,0,0.75)", textAlign: "right" }}>{val}</span>
                         </div>
                       ))}
                     </div>
                   </>
                 )}
+              </Glass>
+
+              {/* Flèche gauche */}
+              <div style={{ position: "absolute", left: "27%", top: "55%", transform: "translateY(-50%)", zIndex: 3 }}>
+                <ArrowBtn onClick={goTractorPrev} disabled={tractorIdx === 0} dir="prev"/>
+              </div>
+
+              {/* Image tracteur */}
+              <div style={{ position: "absolute", right: "10%", top: "55%", transform: "translateY(-50%)", zIndex: 2, height: "85%", display: "flex", alignItems: "center" }}>
+                {activeTractor && <TractorImage tractorKey={activeTractor.key} color={tractorColor} style={{ height: "100%", width: "auto", objectFit: "contain" }}/>}
+              </div>
+
+              {/* Flèche droite */}
+              <div style={{ position: "absolute", right: "15%", top: "55%", transform: "translateY(-50%)", zIndex: 3 }}>
+                <ArrowBtn onClick={goTractorNext} disabled={tractorIdx === tractorList.length - 1} dir="next"/>
               </div>
             </div>
 
-            {/* Flèche gauche — à gauche du tracteur */}
-            <button onClick={goTractorPrev} disabled={tractorIdx === 0} style={{
-              position: "absolute", left: "25%", top: "55%", transform: "translateY(-50%)",
-              width: 42, height: 42, borderRadius: "50%", border: "none",
-              background: tractorIdx === 0 ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.85)",
-              cursor: tractorIdx === 0 ? "not-allowed" : "pointer",
-              fontSize: 22, color: tractorIdx === 0 ? "#ccc" : "#444",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              zIndex: 3, boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-            }}>‹</button>
-
-            {/* Image tracteur */}
-            <div style={{ position: "absolute", right: "10%", top: "55%", transform: "translateY(-50%)", zIndex: 2, height: "85%", display: "flex", alignItems: "center" }}>
-              {activeTractor && (
-                <TractorImage tractorKey={activeTractor.key} color={tractorColor}
-                  style={{ height: "100%", width: "auto", objectFit: "contain" }}/>
-              )}
-            </div>
-
-            {/* Flèche droite — à droite du tracteur */}
-            <button onClick={goTractorNext} disabled={tractorIdx === tractorList.length - 1} style={{
-              position: "absolute", right: "15%", top: "55%", transform: "translateY(-50%)",
-              width: 42, height: 42, borderRadius: "50%", border: "none",
-              background: tractorIdx === tractorList.length - 1 ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.85)",
-              cursor: tractorIdx === tractorList.length - 1 ? "not-allowed" : "pointer",
-              fontSize: 22, color: tractorIdx === tractorList.length - 1 ? "#ccc" : "#444",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              zIndex: 3, boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-            }}>›</button>
-
             {/* Dots */}
-            <div style={{ position: "absolute", bottom: 10, left: 0, right: 0, zIndex: 2 }}>
+            <div style={{ position: "relative", zIndex: 2, paddingBottom: 14 }}>
               <Dots total={tractorList.length} current={tractorIdx} onSelect={setTractorIdx} color={tractorColor}/>
             </div>
           </div>
-          ) : (
-            <div style={{ padding: "30px 24px", textAlign: "center", color: "#bbb", fontSize: 13, fontStyle: "italic" }}>
-              {t.noMachineData} — {tractorBrand}
-            </div>
-          )}
-        </Section>
-      )}
+        )}
 
-      {/* MARQUES MACHINE */}
-      <div style={{ borderBottom: "1.5px solid #e5e1d8" }}>
-        <div style={{ padding: "10px 20px 0", fontSize: 10, fontWeight: 600, color: "#aaa", textTransform: "uppercase", letterSpacing: 1, background: "#fff" }}>
-          {t.machineBrand}
-        </div>
-        <BrandBand brands={MACHINE_BRANDS} selected={machineBrand} onSelect={setMachineBrand}/>
-      </div>
+        {tractorBrand && tractorList.length === 0 && (
+          <Glass style={{ padding: "30px", textAlign: "center", color: "rgba(0,0,0,0.3)", fontSize: 13, fontStyle: "italic" }}>
+            Données à venir — {tractorBrand}
+          </Glass>
+        )}
 
-      {/* MODÈLE MACHINE */}
-      <Section label={t.machineModel} bg="#fff">
+        {/* SECTION MACHINE */}
+        <Glass style={{ padding: "6px 8px" }}>
+          <div style={{ display: "flex", justifyContent: "space-around" }}>
+            {MACHINE_BRANDS.map(({ key, color }) => {
+              const active = machineBrand === key;
+              return (
+                <button key={key} onClick={() => setMachineBrand(key)} style={{
+                  flex: 1, padding: "8px 4px", border: "none", cursor: "pointer",
+                  background: active ? color : "transparent",
+                  borderRadius: 16, transition: "all 0.2s",
+                  color: active ? "#fff" : "rgba(0,0,0,0.5)",
+                  fontSize: "clamp(9px, 1.2vw, 13px)", fontWeight: active ? 700 : 500,
+                  letterSpacing: 0.3, textAlign: "center",
+                }}>
+                  {key.toUpperCase()}
+                </button>
+              );
+            })}
+          </div>
+        </Glass>
+
+        {/* CAROUSEL MACHINE */}
         {machineList.length > 0 ? (
-          <div style={{ padding: "16px 24px 20px", display: "flex", alignItems: "flex-start", gap: 20 }}>
-            <button onClick={() => setMachineIdx(i => Math.max(0, i - 1))} disabled={machineIdx === 0} style={{
-              width: 38, height: 38, borderRadius: 9, border: "1.5px solid #e5e1d8",
-              background: "#fafaf8", cursor: machineIdx === 0 ? "not-allowed" : "pointer",
-              fontSize: 20, color: machineIdx === 0 ? "#ddd" : "#444",
-              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 60,
-            }}>‹</button>
+          <div style={{ position: "relative", borderRadius: 24, overflow: "hidden", minHeight: 240 }}>
+            <BrandBackground brandKey={machineBrand} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}/>
+            <div style={{ position: "absolute", inset: 0, background: `linear-gradient(135deg, rgba(${machineRgb}, 0.15) 0%, rgba(${machineRgb}, 0.05) 100%)` }}/>
+            <div style={{ position: "relative", display: "flex", alignItems: "center", padding: "24px 20px", minHeight: 240 }}>
+              {/* Image machine */}
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-end", zIndex: 2, padding: "0 0 16px 12px" }}>
+                {activeMachine && (
+                  <>
+                    <div style={{ fontSize: 22, fontWeight: 700, color: "rgba(0,0,0,0.85)", marginBottom: 4 }}>{activeMachine.model}</div>
+                    <div style={{ fontSize: 13, color: "rgba(0,0,0,0.4)" }}>MASSE <span style={{ fontWeight: 700, color: "rgba(0,0,0,0.7)" }}>{activeMachine.mass?.toLocaleString()} kg</span></div>
+                  </>
+                )}
+              </div>
 
-            <div style={{ flex: 1 }}>
-              {activeMachine && (
-                <>
-                  <div style={{ borderRadius: 12, overflow: "hidden", background: `${machineColor}06`, border: `1.5px solid ${machineColor}20` }}>
-                    <MachineSVG color={machineColor}/>
-                  </div>
-                  <div style={{ textAlign: "center", marginTop: 12, marginBottom: 4 }}>
-                    <div style={{ fontSize: 18, fontWeight: 700, color: "#1a1a18" }}>{activeMachine.model}</div>
-                  </div>
-                  <InfoGrid items={[
-                    [t.mass, `${activeMachine.mass?.toLocaleString()} kg`],
-                  ]}/>
-                  <Dots total={machineList.length} current={machineIdx} onSelect={setMachineIdx} color={machineColor}/>
-                </>
-              )}
+              {/* Widget machine */}
+              <Glass style={{ flex: "0 0 clamp(160px, 22vw, 260px)", zIndex: 2, padding: "16px 18px" }}>
+                {activeMachine && (
+                  <>
+                    <div style={{ marginBottom: 10, borderBottom: `2px solid ${machineColor}`, paddingBottom: 8 }}>
+                      <div style={{ fontSize: 10, color: machineColor, textTransform: "uppercase", letterSpacing: 1.5, fontWeight: 700 }}>{machineBrand}</div>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: "rgba(0,0,0,0.85)", marginTop: 2 }}>{activeMachine.model}</div>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                      <span style={{ fontSize: 12, color: "rgba(0,0,0,0.4)" }}>Masse</span>
+                      <span style={{ fontSize: 13, fontWeight: 600, color: "rgba(0,0,0,0.75)" }}>{activeMachine.mass?.toLocaleString()} kg</span>
+                    </div>
+                  </>
+                )}
+              </Glass>
+
+              <div style={{ position: "absolute", left: "30%", top: "50%", transform: "translateY(-50%)", zIndex: 3 }}>
+                <ArrowBtn onClick={goMachinePrev} disabled={machineIdx === 0} dir="prev"/>
+              </div>
+              <div style={{ position: "absolute", right: "2%", top: "50%", transform: "translateY(-50%)", zIndex: 3 }}>
+                <ArrowBtn onClick={goMachineNext} disabled={machineIdx === machineList.length - 1} dir="next"/>
+              </div>
             </div>
-
-            <button onClick={() => setMachineIdx(i => Math.min(machineList.length - 1, i + 1))} disabled={machineIdx === machineList.length - 1} style={{
-              width: 38, height: 38, borderRadius: 9, border: "1.5px solid #e5e1d8",
-              background: "#fafaf8", cursor: machineIdx === machineList.length - 1 ? "not-allowed" : "pointer",
-              fontSize: 20, color: machineIdx === machineList.length - 1 ? "#ddd" : "#444",
-              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 60,
-            }}>›</button>
+            <div style={{ position: "relative", zIndex: 2, paddingBottom: 14 }}>
+              <Dots total={machineList.length} current={machineIdx} onSelect={setMachineIdx} color={machineColor}/>
+            </div>
           </div>
         ) : (
-          <div style={{ padding: "30px 24px", textAlign: "center", color: "#bbb", fontSize: 13, fontStyle: "italic" }}>
-            {t.noMachineData} — {machineBrand}
-          </div>
+          <Glass style={{ padding: "30px", textAlign: "center", color: "rgba(0,0,0,0.3)", fontSize: 13, fontStyle: "italic" }}>
+            Données à venir — {machineBrand}
+          </Glass>
         )}
-      </Section>
 
-      {/* OPTIONS */}
-      <Section label={t.options}>
-        <div style={{ padding: "16px 24px 20px" }}>
+        {/* OPTIONS */}
+        <Glass style={{ padding: "20px 22px" }}>
+          <div style={{ fontSize: 10, fontWeight: 600, color: "rgba(0,0,0,0.35)", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: 16 }}>{t.options}</div>
 
-          {/* Sliders masse avant/arrière/roues — toujours visibles */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 32px", marginBottom: 20 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 32px", marginBottom: 16 }}>
             <div>
-              <SliderField label={t.frontBallast} value={options.front_ballast_mass} max={2000} onChange={v => setOptions(o => ({ ...o, front_ballast_mass: v }))}/>
-              <SliderField label={t.frontOffset} value={options.front_ballast_offset} min={0.1} max={2} step={0.05} unit="m" onChange={v => setOptions(o => ({ ...o, front_ballast_offset: v }))}/>
-              <SliderField label={t.rearBallast} value={options.rear_ballast_mass} max={2000} onChange={v => setOptions(o => ({ ...o, rear_ballast_mass: v }))}/>
-              <SliderField label={t.rearOffset} value={options.rear_ballast_offset} min={0.1} max={2} step={0.05} unit="m" onChange={v => setOptions(o => ({ ...o, rear_ballast_offset: v }))}/>
+              <SliderField label={t.frontBallast} value={options.front_ballast_mass} max={2000} accentColor={tractorColor} onChange={v => setOptions(o => ({ ...o, front_ballast_mass: v }))}/>
+              <SliderField label={t.frontOffset} value={options.front_ballast_offset} min={0.1} max={2} step={0.05} unit="m" accentColor={tractorColor} onChange={v => setOptions(o => ({ ...o, front_ballast_offset: v }))}/>
+              <SliderField label={t.rearBallast} value={options.rear_ballast_mass} max={2000} accentColor={tractorColor} onChange={v => setOptions(o => ({ ...o, rear_ballast_mass: v }))}/>
+              <SliderField label={t.rearOffset} value={options.rear_ballast_offset} min={0.1} max={2} step={0.05} unit="m" accentColor={tractorColor} onChange={v => setOptions(o => ({ ...o, rear_ballast_offset: v }))}/>
             </div>
             <div>
-              <SliderField label={t.wheelARG} value={options.wheel_weight_ARG} max={800} step={25} onChange={v => setOptions(o => ({ ...o, wheel_weight_ARG: v }))}/>
-              <SliderField label={t.wheelARD} value={options.wheel_weight_ARD} max={800} step={25} onChange={v => setOptions(o => ({ ...o, wheel_weight_ARD: v }))}/>
+              <SliderField label={t.wheelARG} value={options.wheel_weight_ARG} max={800} step={25} accentColor={tractorColor} onChange={v => setOptions(o => ({ ...o, wheel_weight_ARG: v }))}/>
+              <SliderField label={t.wheelARD} value={options.wheel_weight_ARD} max={800} step={25} accentColor={tractorColor} onChange={v => setOptions(o => ({ ...o, wheel_weight_ARD: v }))}/>
             </div>
           </div>
 
-          {/* Pneu personnalisé */}
-          <ToggleOption
-            label={t.rearTire}
-            active={options.custom_tire}
-            onToggle={v => setOptions(o => ({ ...o, custom_tire: v, rear_tire: v ? o.rear_tire : (tractorList[tractorIdx]?.tire_defaults?.rear || "") }))}
-          >
+          <ToggleOption label={t.rearTire} active={options.custom_tire} color={tractorColor}
+            onToggle={v => setOptions(o => ({ ...o, custom_tire: v, rear_tire: v ? o.rear_tire : (tractorList[tractorIdx]?.tire_defaults?.rear || "") }))}>
             <select value={options.rear_tire} onChange={e => setOptions(o => ({ ...o, rear_tire: e.target.value }))}
-              style={{ width: "100%", padding: "9px 12px", borderRadius: 9, border: "1.5px solid #e0ddd8", fontSize: 13, background: "#fff", marginTop: 10 }}>
+              style={{ width: "100%", padding: "9px 12px", borderRadius: 12, border: "1px solid rgba(0,0,0,0.1)", fontSize: 13, background: "rgba(255,255,255,0.6)", backdropFilter: "blur(10px)" }}>
               <option value="">—</option>
               {allTires.map(ti => <option key={ti.reference} value={ti.reference}>{ti.reference} (⌀ {ti.diameter_mm} mm)</option>)}
             </select>
           </ToggleOption>
 
-          {/* Lestage à l'eau */}
-          <ToggleOption
-            label={t.waterBallast}
-            active={options.water_ballast}
-            onToggle={v => setOptions(o => ({ ...o, water_ballast: v }))}
-          >
-            <div style={{ marginTop: 10, padding: "10px 14px", background: "#f0f8ff", borderRadius: 9, fontSize: 12, color: "#555" }}>
-              Remplissage automatique à 75% du volume des pneus AR avec mélange eau/antigel (0.754875 kg/L)
+          <ToggleOption label={t.waterBallast} active={options.water_ballast} color={tractorColor}
+            onToggle={v => setOptions(o => ({ ...o, water_ballast: v }))}>
+            <div style={{ padding: "10px 14px", background: "rgba(0,0,0,0.04)", borderRadius: 12, fontSize: 12, color: "rgba(0,0,0,0.5)" }}>
+              Remplissage 75% volume pneus AR — eau/antigel (0.755 kg/L)
             </div>
           </ToggleOption>
 
-          {/* Chargeur frontal */}
-          <ToggleOption
-            label={t.loader}
-            active={options.loader_enabled}
-            onToggle={v => setOptions(o => ({ ...o, loader_enabled: v }))}
-          >
-            <div style={{ marginTop: 10 }}>
-              <div style={{ fontSize: 12, color: "#888", marginBottom: 8 }}>
-                {t.loaderSerie} : <strong style={{ color: "#1a1a18" }}>{getLoaderCategory(activeTractor?.mass)}</strong>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <span style={{ fontSize: 13, color: "#555" }}>{t.loaderPos}</span>
-                <div style={{ display: "flex", borderRadius: 8, overflow: "hidden", border: "1.5px solid #e0ddd8" }}>
-                  {[["low", t.low], ["high", t.high]].map(([v, lbl]) => (
-                    <button key={v} onClick={() => setOptions(o => ({ ...o, loader_mode: v }))} style={{
-                      padding: "6px 14px", border: "none", fontSize: 12, cursor: "pointer",
-                      background: options.loader_mode === v ? "#1a1a18" : "#fafaf8",
-                      color: options.loader_mode === v ? "#fff" : "#888",
-                      transition: "all 0.15s",
-                    }}>{lbl}</button>
-                  ))}
-                </div>
+          <ToggleOption label={t.loader} active={options.loader_enabled} color={tractorColor}
+            onToggle={v => setOptions(o => ({ ...o, loader_enabled: v }))}>
+            <div style={{ marginBottom: 10 }}>
+              <span style={{ fontSize: 12, color: "rgba(0,0,0,0.4)" }}>{t.loaderSerie} : </span>
+              <span style={{ fontSize: 13, fontWeight: 600, color: "rgba(0,0,0,0.7)" }}>{getLoaderCategory(activeTractor?.mass)}</span>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <span style={{ fontSize: 13, color: "rgba(0,0,0,0.5)" }}>{t.loaderPos}</span>
+              <div style={{ display: "flex", borderRadius: 20, overflow: "hidden", border: "1px solid rgba(0,0,0,0.1)" }}>
+                {[["low", t.low], ["high", t.high]].map(([v, lbl]) => (
+                  <button key={v} onClick={() => setOptions(o => ({ ...o, loader_mode: v }))} style={{
+                    padding: "5px 14px", border: "none", fontSize: 12, cursor: "pointer",
+                    background: options.loader_mode === v ? tractorColor : "rgba(255,255,255,0.5)",
+                    color: options.loader_mode === v ? "#fff" : "rgba(0,0,0,0.4)",
+                    transition: "all 0.18s",
+                  }}>{lbl}</button>
+                ))}
               </div>
             </div>
           </ToggleOption>
+        </Glass>
 
-        </div>
-      </Section>
-
-      {/* ENVIRONNEMENT */}
-      <Section label={t.environment}>
-        <div style={{ padding: "16px 24px 20px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 32px" }}>
-          <div>
-            <SliderField label={t.slopeLat} value={env.slope_lat} min={-30} max={30} step={0.5} unit="°" onChange={v => setEnv(e => ({ ...e, slope_lat: v }))}/>
-            <SliderField label={t.slopeLong} value={env.slope_long} min={-30} max={30} step={0.5} unit="°" onChange={v => setEnv(e => ({ ...e, slope_long: v }))}/>
+        {/* ENVIRONNEMENT */}
+        <Glass style={{ padding: "20px 22px" }}>
+          <div style={{ fontSize: 10, fontWeight: 600, color: "rgba(0,0,0,0.35)", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: 16 }}>{t.environment}</div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 32px" }}>
+            <div>
+              <SliderField label={t.slopeLat} value={env.slope_lat} min={-30} max={30} step={0.5} unit="°" accentColor={tractorColor} onChange={v => setEnv(e => ({ ...e, slope_lat: v }))}/>
+              <SliderField label={t.slopeLong} value={env.slope_long} min={-30} max={30} step={0.5} unit="°" accentColor={tractorColor} onChange={v => setEnv(e => ({ ...e, slope_long: v }))}/>
+            </div>
+            <div>
+              <SliderField label={`${t.speed} (${(env.speed * 3.6).toFixed(1)} km/h)`} value={env.speed} min={0} max={11.1} step={0.1} unit="m/s" accentColor={tractorColor} onChange={v => setEnv(e => ({ ...e, speed: v }))}/>
+              <SliderField label={t.accel} value={env.accel_long} min={0} max={10} step={0.1} unit="m/s²" accentColor={tractorColor} onChange={v => setEnv(e => ({ ...e, accel_long: v }))}/>
+              <SliderField label={t.turnRadius} value={env.turn_radius} min={0} max={50} step={0.5} unit="m" accentColor={tractorColor} onChange={v => setEnv(e => ({ ...e, turn_radius: v }))}/>
+            </div>
           </div>
-          <div>
-            <SliderField label={`${t.speed} (max ${(env.speed * 3.6).toFixed(1)} km/h)`} value={env.speed} min={0} max={11.1} step={0.1} unit="m/s" onChange={v => setEnv(e => ({ ...e, speed: v }))}/>
-            {env.speed > 0 && <div style={{ fontSize: 11, color: "#854F0B", marginTop: -10, marginBottom: 12 }}>{env.speed.toFixed(1)} m/s = {(env.speed * 3.6).toFixed(1)} km/h</div>}
-            <SliderField label={t.accel} value={env.accel_long} min={0} max={10} step={0.1} unit="m/s²" onChange={v => setEnv(e => ({ ...e, accel_long: v }))}/>
-            <SliderField label={t.turnRadius} value={env.turn_radius} min={0} max={50} step={0.5} unit="m" onChange={v => setEnv(e => ({ ...e, turn_radius: v }))}/>
-          </div>
-        </div>
-      </Section>
+        </Glass>
 
-      {/* RÉSULTATS — double colonne transport / travail */}
-      {result && (
-        <div style={{ padding: "20px 24px" }}>
-          <div style={{ fontSize: 10, fontWeight: 600, color: "#aaa", textTransform: "uppercase", letterSpacing: 1, marginBottom: 16 }}>
-            {t.results}
-          </div>
+        {/* RÉSULTATS */}
+        {result && (
+          <>
+            <div style={{ fontSize: 10, fontWeight: 600, color: "rgba(0,0,0,0.35)", textTransform: "uppercase", letterSpacing: 1.5, padding: "0 4px" }}>{t.results}</div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-            {["transport", "work"].map(m => {
-              const st = result[`static_${m}`];
-              const loads = result[m === "transport" ? "wheels_transport" : "wheels_work"];
-              const cg = result[m === "transport" ? "transport" : "work"];
-              return (
-                <div key={m}>
-                  {/* Titre mode */}
-                  <div style={{
-                    fontSize: 12, fontWeight: 700, color: "#fff", textAlign: "center",
-                    background: "#1a1a18", borderRadius: "10px 10px 0 0", padding: "8px 0",
-                  }}>
-                    {m === "transport" ? t.transport : t.work} — {Math.round(cg?.mass_total || 0).toLocaleString()} kg
-                  </div>
-
-                  {/* Polygone */}
-                  <div style={{ background: "#fff", border: "1.5px solid #e5e1d8", borderTop: "none", padding: "14px 16px" }}>
-                    <div style={{ fontSize: 10, color: "#aaa", marginBottom: 6 }}>{t.polygon}</div>
-                    <PolygonView result={result} mode={m} tractorGeom={activeTractor}/>
-                  </div>
-
-                  {/* Jauges */}
-                  {st && (
-                    <div style={{ display: "flex", gap: 6, margin: "8px 0" }}>
-                      <Gauge label={t.lateral} value={st.I_lat} danger={0.4} warn={0.5}/>
-                      <Gauge label={t.longitudinal} value={st.I_long} danger={0.5} warn={0.6}/>
-                      <Gauge label={t.global} value={st.I_static} danger={0.4} warn={0.5}/>
-                    </div>
-                  )}
-
-                  {/* Roues */}
-                  <div style={{ background: "#fff", borderRadius: 10, border: "1.5px solid #e5e1d8", padding: "14px 16px", marginBottom: 8 }}>
-                    <div style={{ fontSize: 10, color: "#aaa", marginBottom: 12 }}>{t.wheelLoads}</div>
-                    <WheelGrid loads={loads} total={cg?.mass_total || 1} t={t}/>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Critères pleine largeur */}
-          <div style={{ background: "#fff", borderRadius: 14, border: "1.5px solid #e5e1d8", padding: "16px 18px", marginTop: 14 }}>
-            <div style={{ fontSize: 11, color: "#aaa", marginBottom: 10 }}>{t.criteria}</div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 24px" }}>
-              {result.compatibility.map((c, i) => {
-                const { bg, fg } = statusColor(c.status);
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              {["transport", "work"].map(m => {
+                const st = result[`static_${m}`];
+                const loads = result[m === "transport" ? "wheels_transport" : "wheels_work"];
+                const cg = result[m === "transport" ? "transport" : "work"];
                 return (
-                  <div key={i} style={{
-                    display: "flex", justifyContent: "space-between", alignItems: "center",
-                    padding: "7px 0", borderBottom: "0.5px solid #f0ece2",
-                  }}>
-                    <span style={{ fontSize: 12, color: "#555" }}>{c.name}</span>
-                    <span style={{ fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 6, background: bg, color: fg }}>
-                      {c.status.includes("OK") ? "✓ OK" : c.status.includes("vert") || c.status.includes("Avert") ? "⚠" : "✗"}
-                    </span>
+                  <div key={m} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    {/* Titre */}
+                    <div style={{ fontSize: 13, fontWeight: 700, color: "rgba(0,0,0,0.6)", textTransform: "uppercase", letterSpacing: 1, textAlign: "center" }}>
+                      {m === "transport" ? t.transport : t.work} — {Math.round(cg?.mass_total || 0).toLocaleString()} kg
+                    </div>
+
+                    {/* Polygone */}
+                    <Glass style={{ padding: "16px" }}>
+                      <div style={{ fontSize: 10, color: "rgba(0,0,0,0.35)", marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>{t.polygon}</div>
+                      <PolygonView result={result} mode={m} tractorGeom={activeTractor}/>
+                    </Glass>
+
+                    {/* Jauges */}
+                    {st && (
+                      <Glass style={{ padding: "16px", display: "flex", flexDirection: "column", gap: 14 }}>
+                        <Gauge label={t.lateral} value={st.I_lat} danger={0.4} warn={0.5}/>
+                        <Gauge label={t.longitudinal} value={st.I_long} danger={0.5} warn={0.6}/>
+                        <Gauge label={t.global} value={st.I_static} danger={0.4} warn={0.5}/>
+                      </Glass>
+                    )}
+
+                    {/* Roues */}
+                    <Glass style={{ padding: "16px" }}>
+                      <div style={{ fontSize: 10, color: "rgba(0,0,0,0.35)", marginBottom: 14, textTransform: "uppercase", letterSpacing: 1 }}>{t.wheelLoads}</div>
+                      <WheelGrid loads={loads} total={cg?.mass_total || 1} t={t}/>
+                    </Glass>
                   </div>
                 );
               })}
             </div>
-          </div>
-        </div>
-      )}
 
-      <StickyBar result={result} mode={mode} t={t} onModeChange={setMode}/>
+            {/* Critères pleine largeur */}
+            <Glass style={{ padding: "20px 22px" }}>
+              <div style={{ fontSize: 10, fontWeight: 600, color: "rgba(0,0,0,0.35)", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: 14 }}>{t.criteria}</div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 24px" }}>
+                {result.compatibility.map((c, i) => {
+                  const { bg, fg } = statusColor(c.status);
+                  return (
+                    <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: "1px solid rgba(0,0,0,0.05)" }}>
+                      <span style={{ fontSize: 12, color: "rgba(0,0,0,0.55)" }}>{c.name}</span>
+                      <span style={{ fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 20, background: bg, color: fg }}>
+                        {c.status.includes("OK") ? "✓ OK" : c.status.includes("vert") || c.status.includes("Avert") ? "⚠" : "✗"}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </Glass>
+          </>
+        )}
+      </div>
+
+      <StickyBar result={result} mode={mode} t={t} onModeChange={setMode} brandColor={tractorBrand ? tractorColor : "#333333"}/>
     </div>
   );
 }
