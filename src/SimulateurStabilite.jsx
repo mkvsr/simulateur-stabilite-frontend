@@ -914,9 +914,8 @@ export default function SimulateurStabilite() {
             </Glass>
           </>
         )}
-      </div>
 
-      <StickyBar result={result} mode={mode} t={t} onModeChange={setMode} brandColor={tractorBrand ? tractorColor : "#333333"}/>
-    </div>
+        <StickyBar result={result} mode={mode} t={t} onModeChange={setMode} brandColor={tractorBrand ? tractorColor : "#333333"}/>
+      </div>
   );
 }
