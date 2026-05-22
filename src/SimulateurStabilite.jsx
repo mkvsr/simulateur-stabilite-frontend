@@ -514,71 +514,54 @@ export default function SimulateurStabilite() {
           </div>
         </Glass>
 
-        {/* SECTION TRACTEUR */}
-        {tractorBrand && (
-          <div style={{ position: "relative", borderRadius: 24, overflow: "hidden", minHeight: 280 }}>
-            {/* Fond de marque */}
-            <BrandBackground brandKey={tractorBrand} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}/>
-            {/* Overlay gradient marque */}
-            <div style={{
-              position: "absolute", inset: 0,
-              background: `linear-gradient(135deg, rgba(${tractorRgb}, 0.15) 0%, rgba(${tractorRgb}, 0.05) 100%)`,
-            }}/>
-            <div style={{ position: "relative", display: "flex", alignItems: "center", padding: "24px 20px", minHeight: 280 }}>
-              {/* Widget infos */}
-              <Glass style={{
-                flex: `0 0 clamp(160px, 22vw, 280px)`, marginLeft: 8, zIndex: 2,
-                padding: "clamp(12px, 1.5vw, 20px) clamp(14px, 1.8vw, 22px)",
-              }}>
-                {activeTractor && (
-                  <>
-                    <div style={{ marginBottom: 12, borderBottom: `2px solid ${tractorColor}`, paddingBottom: 10 }}>
-                      <div style={{ fontSize: "clamp(9px, 1vw, 11px)", color: tractorColor, textTransform: "uppercase", letterSpacing: 1.5, fontWeight: 700 }}>{activeTractor.brand}</div>
-                      <div style={{ fontSize: "clamp(14px, 2vw, 22px)", fontWeight: 700, color: "rgba(0,0,0,0.85)", lineHeight: 1.2, marginTop: 3 }}>
-                        {activeTractor.model}
+        {/* SECTION TRACTEUR — deux widgets côte à côte */}
+        {tractorBrand && tractorList.length > 0 && (
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 16, alignItems: "start" }}>
+
+            {/* Widget propriétés */}
+            <Glass style={{ padding: "20px 22px" }}>
+              {activeTractor && (
+                <>
+                  <div style={{ marginBottom: 14, borderBottom: `2px solid ${tractorColor}`, paddingBottom: 10 }}>
+                    <div style={{ fontSize: 10, color: tractorColor, textTransform: "uppercase", letterSpacing: 1.5, fontWeight: 700 }}>{activeTractor.brand}</div>
+                    <div style={{ fontSize: 22, fontWeight: 700, color: "rgba(0,0,0,0.85)", lineHeight: 1.2, marginTop: 3 }}>{activeTractor.model}</div>
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    {[
+                      ["Masse à vide", `${activeTractor.mass?.toLocaleString()} kg`],
+                      ["Répartition", `${activeTractor.mass_front_pct}% AV / ${activeTractor.mass_rear_pct}% AR`],
+                      ["PTAC", activeTractor.ptac ? `${activeTractor.ptac?.toLocaleString()} kg` : "—"],
+                      ["Empattement", `${activeTractor.wheelbase?.toFixed(3)} m`],
+                      ["Voie AR", `${activeTractor.track_rear?.toFixed(2)} m`],
+                      ["Pneu AV", activeTractor.tire_defaults?.front || "—"],
+                      ["Pneu AR", activeTractor.tire_defaults?.rear || "—"],
+                      ["Vitesse max", activeTractor.dynamics?.max_speed_kmh ? `${activeTractor.dynamics.max_speed_kmh} km/h` : "—"],
+                    ].map(([lbl, val]) => (
+                      <div key={lbl} style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
+                        <span style={{ fontSize: 12, color: "rgba(0,0,0,0.4)" }}>{lbl}</span>
+                        <span style={{ fontSize: 13, fontWeight: 600, color: "rgba(0,0,0,0.75)", textAlign: "right" }}>{val}</span>
                       </div>
-                    </div>
-                    <div style={{ display: "flex", flexDirection: "column", gap: "clamp(4px, 0.6vw, 8px)" }}>
-                      {[
-                        ["Masse à vide", `${activeTractor.mass?.toLocaleString()} kg`],
-                        ["Répartition", `${activeTractor.mass_front_pct}% AV / ${activeTractor.mass_rear_pct}% AR`],
-                        ["PTAC", activeTractor.ptac ? `${activeTractor.ptac?.toLocaleString()} kg` : "—"],
-                        ["Empattement", `${activeTractor.wheelbase?.toFixed(3)} m`],
-                        ["Voie AR", `${activeTractor.track_rear?.toFixed(2)} m`],
-                        ["Pneu AV", activeTractor.tire_defaults?.front || "—"],
-                        ["Pneu AR", activeTractor.tire_defaults?.rear || "—"],
-                        ["Vitesse max", activeTractor.dynamics?.max_speed_kmh ? `${activeTractor.dynamics.max_speed_kmh} km/h` : "—"],
-                      ].map(([lbl, val]) => (
-                        <div key={lbl} style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
-                          <span style={{ fontSize: "clamp(9px, 1vw, 12px)", color: "rgba(0,0,0,0.4)" }}>{lbl}</span>
-                          <span style={{ fontSize: "clamp(10px, 1.1vw, 13px)", fontWeight: 600, color: "rgba(0,0,0,0.75)", textAlign: "right" }}>{val}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </Glass>
+                    ))}
+                  </div>
+                </>
+              )}
+            </Glass>
 
-              {/* Flèche gauche */}
-              <div style={{ position: "absolute", left: "27%", top: "55%", transform: "translateY(-50%)", zIndex: 3 }}>
-                <ArrowBtn onClick={goTractorPrev} disabled={tractorIdx === 0} dir="prev"/>
+            {/* Widget visualisation */}
+            <Glass style={{ padding: "20px", position: "relative", minHeight: 260, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+              <div style={{ position: "relative", flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <div style={{ position: "absolute", left: 0, top: "50%", transform: "translateY(-50%)", zIndex: 3 }}>
+                  <ArrowBtn onClick={goTractorPrev} disabled={tractorIdx === 0} dir="prev"/>
+                </div>
+                <div style={{ height: 200, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  {activeTractor && <TractorImage tractorKey={activeTractor.key} color={tractorColor} style={{ height: "100%", width: "auto", objectFit: "contain" }}/>}
+                </div>
+                <div style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)", zIndex: 3 }}>
+                  <ArrowBtn onClick={goTractorNext} disabled={tractorIdx === tractorList.length - 1} dir="next"/>
+                </div>
               </div>
-
-              {/* Image tracteur */}
-              <div style={{ position: "absolute", right: "10%", top: "55%", transform: "translateY(-50%)", zIndex: 2, height: "85%", display: "flex", alignItems: "center" }}>
-                {activeTractor && <TractorImage tractorKey={activeTractor.key} color={tractorColor} style={{ height: "100%", width: "auto", objectFit: "contain" }}/>}
-              </div>
-
-              {/* Flèche droite */}
-              <div style={{ position: "absolute", right: "15%", top: "55%", transform: "translateY(-50%)", zIndex: 3 }}>
-                <ArrowBtn onClick={goTractorNext} disabled={tractorIdx === tractorList.length - 1} dir="next"/>
-              </div>
-            </div>
-
-            {/* Dots */}
-            <div style={{ position: "relative", zIndex: 2, paddingBottom: 14 }}>
               <Dots total={tractorList.length} current={tractorIdx} onSelect={setTractorIdx} color={tractorColor}/>
-            </div>
+            </Glass>
           </div>
         )}
 
@@ -609,48 +592,48 @@ export default function SimulateurStabilite() {
           </div>
         </Glass>
 
-        {/* CAROUSEL MACHINE */}
+        {/* CAROUSEL MACHINE — deux widgets côte à côte */}
         {machineList.length > 0 ? (
-          <div style={{ position: "relative", borderRadius: 24, overflow: "hidden", minHeight: 240 }}>
-            <BrandBackground brandKey={machineBrand} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}/>
-            <div style={{ position: "absolute", inset: 0, background: `linear-gradient(135deg, rgba(${machineRgb}, 0.15) 0%, rgba(${machineRgb}, 0.05) 100%)` }}/>
-            <div style={{ position: "relative", display: "flex", alignItems: "center", padding: "24px 20px", minHeight: 240 }}>
-              {/* Image machine */}
-              <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-end", zIndex: 2, padding: "0 0 16px 12px" }}>
-                {activeMachine && (
-                  <>
-                    <div style={{ fontSize: 22, fontWeight: 700, color: "rgba(0,0,0,0.85)", marginBottom: 4 }}>{activeMachine.model}</div>
-                    <div style={{ fontSize: 13, color: "rgba(0,0,0,0.4)" }}>MASSE <span style={{ fontWeight: 700, color: "rgba(0,0,0,0.7)" }}>{activeMachine.mass?.toLocaleString()} kg</span></div>
-                  </>
-                )}
-              </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 16, alignItems: "start" }}>
 
-              {/* Widget machine */}
-              <Glass style={{ flex: "0 0 clamp(160px, 22vw, 260px)", zIndex: 2, padding: "16px 18px" }}>
-                {activeMachine && (
-                  <>
-                    <div style={{ marginBottom: 10, borderBottom: `2px solid ${machineColor}`, paddingBottom: 8 }}>
-                      <div style={{ fontSize: 10, color: machineColor, textTransform: "uppercase", letterSpacing: 1.5, fontWeight: 700 }}>{machineBrand}</div>
-                      <div style={{ fontSize: 16, fontWeight: 700, color: "rgba(0,0,0,0.85)", marginTop: 2 }}>{activeMachine.model}</div>
-                    </div>
-                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                      <span style={{ fontSize: 12, color: "rgba(0,0,0,0.4)" }}>Masse</span>
-                      <span style={{ fontSize: 13, fontWeight: 600, color: "rgba(0,0,0,0.75)" }}>{activeMachine.mass?.toLocaleString()} kg</span>
-                    </div>
-                  </>
-                )}
-              </Glass>
+            {/* Widget propriétés machine */}
+            <Glass style={{ padding: "20px 22px" }}>
+              {activeMachine && (
+                <>
+                  <div style={{ marginBottom: 14, borderBottom: `2px solid ${machineColor}`, paddingBottom: 10 }}>
+                    <div style={{ fontSize: 10, color: machineColor, textTransform: "uppercase", letterSpacing: 1.5, fontWeight: 700 }}>{machineBrand}</div>
+                    <div style={{ fontSize: 20, fontWeight: 700, color: "rgba(0,0,0,0.85)", lineHeight: 1.2, marginTop: 3 }}>{activeMachine.model}</div>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <span style={{ fontSize: 12, color: "rgba(0,0,0,0.4)" }}>Masse</span>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: "rgba(0,0,0,0.75)" }}>{activeMachine.mass?.toLocaleString()} kg</span>
+                  </div>
+                </>
+              )}
+            </Glass>
 
-              <div style={{ position: "absolute", left: "30%", top: "50%", transform: "translateY(-50%)", zIndex: 3 }}>
-                <ArrowBtn onClick={goMachinePrev} disabled={machineIdx === 0} dir="prev"/>
+            {/* Widget visualisation machine */}
+            <Glass style={{ padding: "20px", position: "relative", minHeight: 220, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+              <div style={{ position: "relative", flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <div style={{ position: "absolute", left: 0, top: "50%", transform: "translateY(-50%)", zIndex: 3 }}>
+                  <ArrowBtn onClick={goMachinePrev} disabled={machineIdx === 0} dir="prev"/>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, padding: "0 60px" }}>
+                  {activeMachine && (
+                    <>
+                      <div style={{ fontSize: 20, fontWeight: 700, color: "rgba(0,0,0,0.8)" }}>{activeMachine.model}</div>
+                      <div style={{ fontSize: 13, color: "rgba(0,0,0,0.35)" }}>
+                        MASSE <span style={{ fontWeight: 700, color: "rgba(0,0,0,0.6)" }}>{activeMachine.mass?.toLocaleString()} kg</span>
+                      </div>
+                    </>
+                  )}
+                </div>
+                <div style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)", zIndex: 3 }}>
+                  <ArrowBtn onClick={goMachineNext} disabled={machineIdx === machineList.length - 1} dir="next"/>
+                </div>
               </div>
-              <div style={{ position: "absolute", right: "2%", top: "50%", transform: "translateY(-50%)", zIndex: 3 }}>
-                <ArrowBtn onClick={goMachineNext} disabled={machineIdx === machineList.length - 1} dir="next"/>
-              </div>
-            </div>
-            <div style={{ position: "relative", zIndex: 2, paddingBottom: 14 }}>
               <Dots total={machineList.length} current={machineIdx} onSelect={setMachineIdx} color={machineColor}/>
-            </div>
+            </Glass>
           </div>
         ) : (
           <Glass style={{ padding: "30px", textAlign: "center", color: "rgba(0,0,0,0.3)", fontSize: 13, fontStyle: "italic" }}>
