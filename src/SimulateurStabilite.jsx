@@ -555,8 +555,8 @@ export default function SimulateurStabilite() {
                     <div style={{ position: "absolute", left: 0, top: "50%", transform: "translateY(-50%)" }}>
                       <ArrowBtn onClick={goTractorPrev} disabled={tractorIdx === 0} dir="prev"/>
                     </div>
-                    <div key={activeTractor?.key} style={{ width: "70%", height: "70%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <TractorImage tractorKey={activeTractor.key} color={tractorColor} style={{ maxHeight: "100%", maxWidth: "100%", objectFit: "contain" }}/>
+                    <div key={activeTractor?.key} style={{ width: "100%", height: "100%", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <TractorImage tractorKey={activeTractor.key} color={tractorColor} style={{ height: "100%", width: "auto", objectFit: "contain" }}/>
                     </div>
                     <div style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)" }}>
                       <ArrowBtn onClick={goTractorNext} disabled={tractorIdx === tractorList.length - 1} dir="next"/>
