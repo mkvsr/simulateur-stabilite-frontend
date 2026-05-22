@@ -912,6 +912,7 @@ export default function SimulateurStabilite() {
                 })}
               </div>
             </Glass>
+          </>
         )}
       </div>
 
