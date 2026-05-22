@@ -551,12 +551,12 @@ export default function SimulateurStabilite() {
 
                 {/* Widget visualisation tracteur */}
                 <Glass style={{ padding: "16px", aspectRatio: "1 / 1", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-                  <div style={{ position: "relative", flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <div style={{ position: "relative", flex: 1, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 0 }}>
                     <div style={{ position: "absolute", left: 0, top: "50%", transform: "translateY(-50%)" }}>
                       <ArrowBtn onClick={goTractorPrev} disabled={tractorIdx === 0} dir="prev"/>
                     </div>
-                    <div key={activeTractor?.key} style={{ width: "100%", height: "100%", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <TractorImage tractorKey={activeTractor.key} color={tractorColor} style={{ height: "100%", width: "auto", objectFit: "contain" }}/>
+                    <div key={activeTractor?.key} style={{ position: "absolute", inset: "0 50px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <TractorImage tractorKey={activeTractor.key} color={tractorColor} style={{ maxHeight: "100%", maxWidth: "100%", objectFit: "contain" }}/>
                     </div>
                     <div style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)" }}>
                       <ArrowBtn onClick={goTractorNext} disabled={tractorIdx === tractorList.length - 1} dir="next"/>
