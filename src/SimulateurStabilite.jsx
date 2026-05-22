@@ -518,6 +518,151 @@ export default function SimulateurStabilite() {
               </div>
             </Glass>
 
+            {/* Propriétés + Visualisation côte à côte */}
+            {tractorBrand && tractorList.length > 0 && activeTractor && (
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+
+                {/* Widget propriétés tracteur */}
+                <Glass style={{ padding: "18px 20px", aspectRatio: "1 / 1", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                  <div>
+                    <div style={{ marginBottom: 12, borderBottom: `2px solid ${tractorColor}`, paddingBottom: 8 }}>
+                      <div style={{ fontSize: 10, color: tractorColor, textTransform: "uppercase", letterSpacing: 1.5, fontWeight: 700 }}>{activeTractor.brand}</div>
+                      <div style={{ fontSize: 18, fontWeight: 700, color: "rgba(0,0,0,0.85)", lineHeight: 1.2, marginTop: 2 }}>{activeTractor.model}</div>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                      {[
+                        ["Masse à vide", `${activeTractor.mass?.toLocaleString()} kg`],
+                        ["Répartition", `${activeTractor.mass_front_pct}% AV / ${activeTractor.mass_rear_pct}% AR`],
+                        ["PTAC", activeTractor.ptac ? `${activeTractor.ptac?.toLocaleString()} kg` : "—"],
+                        ["Empattement", `${activeTractor.wheelbase?.toFixed(3)} m`],
+                        ["Voie AR", `${activeTractor.track_rear?.toFixed(2)} m`],
+                        ["Pneu AV", activeTractor.tire_defaults?.front || "—"],
+                        ["Pneu AR", activeTractor.tire_defaults?.rear || "—"],
+                        ["Vitesse max", activeTractor.dynamics?.max_speed_kmh ? `${activeTractor.dynamics.max_speed_kmh} km/h` : "—"],
+                      ].map(([lbl, val]) => (
+                        <div key={lbl} style={{ display: "flex", justifyContent: "space-between", gap: 4 }}>
+                          <span style={{ fontSize: 11, color: "rgba(0,0,0,0.4)" }}>{lbl}</span>
+                          <span style={{ fontSize: 11, fontWeight: 600, color: "rgba(0,0,0,0.75)", textAlign: "right" }}>{val}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </Glass>
+
+                {/* Widget visualisation tracteur */}
+                <Glass style={{ padding: "16px", aspectRatio: "1 / 1", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                  <div style={{ position: "relative", flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <div style={{ position: "absolute", left: 0, top: "50%", transform: "translateY(-50%)" }}>
+                      <ArrowBtn onClick={goTractorPrev} disabled={tractorIdx === 0} dir="prev"/>
+                    </div>
+                    <div key={activeTractor?.key} style={{ width: "70%", height: "70%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <TractorImage tractorKey={activeTractor.key} color={tractorColor} style={{ maxHeight: "100%", maxWidth: "100%", objectFit: "contain" }}/>
+                    </div>
+                    <div style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)" }}>
+                      <ArrowBtn onClick={goTractorNext} disabled={tractorIdx === tractorList.length - 1} dir="next"/>
+                    </div>
+                  </div>
+                  <Dots total={tractorList.length} current={tractorIdx} onSelect={setTractorIdx} color={tractorColor}/>
+                </Glass>
+              </div>
+            )}
+
+            {tractorBrand && tractorList.length === 0 && (
+              <Glass style={{ padding: "30px", textAlign: "center", color: "rgba(0,0,0,0.3)", fontSize: 13, fontStyle: "italic" }}>
+                Données à venir — {tractorBrand}
+              </Glass>
+            )}
+          </div>
+
+          {/* ── COLONNE MACHINE ── */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+
+            {/* Bandeau marques machine */}
+            <Glass style={{ padding: "6px 8px" }}>
+              <div style={{ display: "flex", justifyContent: "space-around" }}>
+                {MACHINE_BRANDS.map(({ key, color }) => {
+                  const active = machineBrand === key;
+                  return (
+                    <button key={key} onClick={() => setMachineBrand(key)} style={{
+                      flex: 1, padding: "8px 4px", border: "none", cursor: "pointer",
+                      background: active ? color : "transparent",
+                      borderRadius: 14, transition: "all 0.2s",
+                      color: active ? "#fff" : "rgba(0,0,0,0.45)",
+                      fontSize: "clamp(8px, 1vw, 12px)", fontWeight: active ? 700 : 500,
+                      letterSpacing: 0.3, textAlign: "center",
+                    }}>{key.toUpperCase()}</button>
+                  );
+                })}
+              </div>
+            </Glass>
+
+            {/* Propriétés + Visualisation machine côte à côte */}
+            {machineList.length > 0 && activeMachine ? (
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+
+                {/* Widget propriétés machine */}
+                <Glass style={{ padding: "18px 20px", aspectRatio: "1 / 1", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                  <div>
+                    <div style={{ marginBottom: 12, borderBottom: `2px solid ${machineColor}`, paddingBottom: 8 }}>
+                      <div style={{ fontSize: 10, color: machineColor, textTransform: "uppercase", letterSpacing: 1.5, fontWeight: 700 }}>{machineBrand}</div>
+                      <div style={{ fontSize: 18, fontWeight: 700, color: "rgba(0,0,0,0.85)", lineHeight: 1.2, marginTop: 2 }}>{activeMachine.model}</div>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                      <span style={{ fontSize: 11, color: "rgba(0,0,0,0.4)" }}>Masse</span>
+                      <span style={{ fontSize: 11, fontWeight: 600, color: "rgba(0,0,0,0.75)" }}>{activeMachine.mass?.toLocaleString()} kg</span>
+                    </div>
+                  </div>
+                </Glass>
+
+                {/* Widget visualisation machine */}
+                <Glass style={{ padding: "16px", aspectRatio: "1 / 1", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                  <div style={{ position: "relative", flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <div style={{ position: "absolute", left: 0, top: "50%", transform: "translateY(-50%)" }}>
+                      <ArrowBtn onClick={goMachinePrev} disabled={machineIdx === 0} dir="prev"/>
+                    </div>
+                    <div key={activeMachine?.key} style={{ textAlign: "center", padding: "0 50px" }}>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: "rgba(0,0,0,0.8)", marginBottom: 6 }}>{activeMachine.model}</div>
+                      <div style={{ fontSize: 12, color: "rgba(0,0,0,0.35)" }}>
+                        MASSE <span style={{ fontWeight: 700, color: "rgba(0,0,0,0.6)" }}>{activeMachine.mass?.toLocaleString()} kg</span>
+                      </div>
+                    </div>
+                    <div style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)" }}>
+                      <ArrowBtn onClick={goMachineNext} disabled={machineIdx === machineList.length - 1} dir="next"/>
+                    </div>
+                  </div>
+                  <Dots total={machineList.length} current={machineIdx} onSelect={setMachineIdx} color={machineColor}/>
+                </Glass>
+              </div>
+            ) : (
+              <Glass style={{ padding: "30px", textAlign: "center", color: "rgba(0,0,0,0.3)", fontSize: 13, fontStyle: "italic" }}>
+                Données à venir — {machineBrand}
+              </Glass>
+            )}
+          </div>
+        </div>
+
+          {/* ── COLONNE TRACTEUR ── */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+
+            {/* Bandeau marques tracteur */}
+            <Glass style={{ padding: "6px 8px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: `repeat(auto-fit, minmax(clamp(50px, 7vw, 110px), 1fr))` }}>
+                {TRACTOR_BRANDS.map(({ key, color }) => {
+                  const active = tractorBrand === key;
+                  return (
+                    <button key={key} onClick={() => setTractorBrand(key)} style={{
+                      padding: "8px 4px", border: "none", cursor: "pointer",
+                      background: active ? color : "transparent",
+                      borderRadius: 14, transition: "all 0.2s",
+                      color: active ? "#fff" : "rgba(0,0,0,0.45)",
+                      fontSize: "clamp(8px, 0.9vw, 11px)", fontWeight: active ? 700 : 500,
+                      letterSpacing: 0.3, textAlign: "center",
+                    }}>{key.toUpperCase()}</button>
+                  );
+                })}
+              </div>
+            </Glass>
+
             {/* Widget propriétés tracteur */}
             {tractorBrand && tractorList.length > 0 && activeTractor && (
               <Glass style={{ padding: "20px 22px" }}>
