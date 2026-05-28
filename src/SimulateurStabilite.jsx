@@ -746,7 +746,7 @@ export default function SimulateurStabilite() {
                 </Glass>
 
                 {/* Widget visualisation machine — à droite wide, en haut narrow */}
-                <Glass style={{ flex: "2 1 400px", minWidth: 0, order: isNarrow ? 0 : 1, padding: "16px", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: 200 }}>
+                <Glass style={{ flex: "2 1 400px", minWidth: 0, order: isNarrow ? 0 : 1, padding: "16px", display: "flex", flexDirection: "column", justifyContent: "space-between", aspectRatio: "3 / 2", alignSelf: "flex-start" }}>
                   <div style={{ position: "relative", flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <div style={{ position: "absolute", left: 0, top: "50%", transform: "translateY(-50%)" }}>
                       <ArrowBtn onClick={goMachinePrev} disabled={machineIdx === 0} dir="prev"/>
