@@ -177,7 +177,7 @@ function Gauge({ label, value, danger, warn }) {
 
 function PolygonView({ result, mode, tractorGeom }) {
   if (!result || !tractorGeom) return null;
-  const W = 360, H = 200, PAD = 44;
+  const W = 360, H = 200, PAD = 20;
   const L = tractorGeom.wheelbase || 2.6;
   const TF = tractorGeom.track_front || 2.0;
   const TR = tractorGeom.track_rear || 2.0;
@@ -185,24 +185,83 @@ function PolygonView({ result, mode, tractorGeom }) {
   const st = result[`static_${mode}`];
   if (!cgData || !st) return null;
   const { X: XG, Y: YG } = cgData.CG;
-  const maxDim = Math.max(L * 1.3, Math.max(TF, TR) * 1.3);
+  // Tractor schematic — world units (m), définis avant scale pour le centrage
+  const rWx = L * 0.32,  rWy = TR * 0.150;
+  const fWx = L * 0.24,  fWy = TF * 0.126;
+  const maxDim = Math.max(L * 1.1, Math.max(TF/2 + fWy, TR/2 + rWy) * 2);
   const scale = Math.min((W - 2 * PAD) / maxDim, (H - 2 * PAD) / maxDim);
-  const cx = W / 2, cy = H / 2;
+  const cx = W / 2 + L * 0.02 * scale, cy = H / 2;
   const tx = x => cx + x * scale;
   const ty = y => cy - y * scale;
   const pts = [[L/2,TF/2],[L/2,-TF/2],[-L/2,-TR/2],[-L/2,TR/2]];
   const svgPts = pts.map(([x,y]) => `${tx(x).toFixed(1)},${ty(y).toFixed(1)}`).join(" ");
   const ist = st.I_static;
   const pc = ist < 0 ? "#C0392B" : ist < 0.4 ? "#C0392B" : ist < 0.5 ? "#E67E22" : "#27AE60";
+
+  // Wheel rect helper
+  const wr = (xc, yc, hx, hy) => {
+    const sw = hx * 2 * scale, sh = hy * 2 * scale;
+    return { x: tx(xc - hx), y: ty(yc + hy), width: sw, height: sh, rx: Math.min(sw, sh) * 0.28 };
+  };
+  const bodyHW = TR * 0.37;
+  const bx1 = -L/2 - L*0.15, bx2 = L * 0.03;
+  const hx1 = bx2, hx2 = L/2 + fWx + L * 0.04;
+  const hHW1 = bodyHW * 0.55, hHW2 = TF * 0.21;
+  const bridgeHX = L * 0.045;
+  const bridgeY0 = hHW2;
+  const bridgeY1 = TF/2 - fWy;
+  const tf = "rgba(0,0,0,0.08)", ts = "rgba(0,0,0,0.22)";
+  const wf = "rgba(0,0,0,0.12)", ws = "rgba(0,0,0,0.24)";
+
+  const r = 7;
+  const Ax = tx(hx1), Ay = ty(hHW1);
+  const Bx = tx(hx2), By = ty(hHW2);
+  const Cx = tx(hx2), Cy = ty(-hHW2);
+  const Dx = tx(hx1), Dy = ty(-hHW1);
+  const ABlen = Math.sqrt((Bx-Ax)**2 + (By-Ay)**2);
+  const CDlen = Math.sqrt((Dx-Cx)**2 + (Dy-Cy)**2);
+  const ABux = (Bx-Ax)/ABlen, ABuy = (By-Ay)/ABlen;
+  const CDux = (Dx-Cx)/CDlen, CDuy = (Dy-Cy)/CDlen;
+  const hoodPath = [
+    `M ${Ax.toFixed(1)},${Ay.toFixed(1)}`,
+    `L ${(Bx - r*ABux).toFixed(1)},${(By - r*ABuy).toFixed(1)}`,
+    `Q ${Bx.toFixed(1)},${By.toFixed(1)} ${Bx.toFixed(1)},${(By + r).toFixed(1)}`,
+    `L ${Cx.toFixed(1)},${(Cy - r).toFixed(1)}`,
+    `Q ${Cx.toFixed(1)},${Cy.toFixed(1)} ${(Cx + r*CDux).toFixed(1)},${(Cy + r*CDuy).toFixed(1)}`,
+    `L ${Dx.toFixed(1)},${Dy.toFixed(1)}`,
+    `Z`,
+  ].join(' ');
+
   return (
     <svg width="100%" viewBox={`0 0 ${W} ${H}`}>
-      <polygon points={svgPts} fill={`${pc}12`} stroke={pc} strokeWidth="1.5" strokeDasharray="6 3"/>
-      {pts.map(([x,y],i) => <circle key={i} cx={tx(x)} cy={ty(y)} r={5} fill={pc}/>)}
-      <line x1={cx} y1={PAD/2} x2={cx} y2={H-PAD/2} stroke="rgba(0,0,0,0.08)" strokeWidth="1" strokeDasharray="4 4"/>
-      <line x1={PAD/2} y1={cy} x2={W-PAD/2} y2={cy} stroke="rgba(0,0,0,0.08)" strokeWidth="1" strokeDasharray="4 4"/>
+      {/* Rear wheels */}
+      <rect {...wr(-L/2,  TR/2, rWx, rWy)} fill={wf} stroke={ws} strokeWidth="1.3"/>
+      <rect {...wr(-L/2, -TR/2, rWx, rWy)} fill={wf} stroke={ws} strokeWidth="1.3"/>
+      {/* Front wheels */}
+      <rect {...wr( L/2,  TF/2, fWx, fWy)} fill={wf} stroke={ws} strokeWidth="1.3"/>
+      <rect {...wr( L/2, -TF/2, fWx, fWy)} fill={wf} stroke={ws} strokeWidth="1.3"/>
+      {/* Hood: trapezoid, arrondis côté roues AV uniquement */}
+      <path d={hoodPath} fill={tf} stroke={ts} strokeWidth="1"/>
+      {/* Cab body */}
+      <rect x={tx(bx1)} y={ty(bodyHW)} width={(bx2-bx1)*scale} height={bodyHW*2*scale} rx="5" fill={tf} stroke={ts} strokeWidth="1"/>
+      {/* Pont avant — gauche et droite */}
+      <rect x={tx(L/2 - bridgeHX)} y={ty(bridgeY1)} width={bridgeHX*2*scale} height={(bridgeY1-bridgeY0)*scale} fill={wf} stroke={ws} strokeWidth="1"/>
+      <rect x={tx(L/2 - bridgeHX)} y={ty(-bridgeY0)} width={bridgeHX*2*scale} height={(bridgeY1-bridgeY0)*scale} fill={wf} stroke={ws} strokeWidth="1"/>
+
+      {/* Stability polygon */}
+      <polygon points={svgPts} fill={`${pc}18`} stroke={pc} strokeWidth="1.5" strokeDasharray="6 3"/>
+      {pts.map(([x,y],i) => <circle key={i} cx={tx(x)} cy={ty(y)} r={4} fill={pc}/>)}
+
+      {/* Axes */}
+      <line x1={cx} y1={PAD/2} x2={cx} y2={H-PAD/2} stroke="rgba(0,0,0,0.07)" strokeWidth="1" strokeDasharray="4 4"/>
+      <line x1={PAD/2} y1={cy} x2={W-PAD/2} y2={cy} stroke="rgba(0,0,0,0.07)" strokeWidth="1" strokeDasharray="4 4"/>
+
+      {/* CG point */}
       <circle cx={tx(XG)} cy={ty(YG)} r={12} fill={pc} opacity="0.15"/>
       <circle cx={tx(XG)} cy={ty(YG)} r={7} fill={pc}/>
       <circle cx={tx(XG)} cy={ty(YG)} r={3} fill="#fff"/>
+
+      {/* Labels */}
       <text x={tx(L/2)+8} y={cy+4} fontSize="10" fill="rgba(0,0,0,0.3)">AV</text>
       <text x={tx(-L/2)-24} y={cy+4} fontSize="10" fill="rgba(0,0,0,0.3)">AR</text>
       <text x={tx(XG)} y={ty(YG)-18} fontSize="9" fill={pc} textAnchor="middle" fontWeight="600">
@@ -214,33 +273,84 @@ function PolygonView({ result, mode, tractorGeom }) {
 
 // ── WheelGrid ──────────────────────────────────────────────────────────────
 
-function WheelGrid({ loads, total, t }) {
+function WheelGrid({ loads, total, t, tractorGeom }) {
   const { FL, FR, RL, RR } = loads;
   const wc = v => (v / total) > 0.4 ? "#C0392B" : (v / total) > 0.35 ? "#E67E22" : "#27AE60";
-  const Wheel = ({ val, label }) => (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
-      <div style={{
-        width: 68, height: 68, borderRadius: 18,
-        background: `rgba(${hexToRgb(wc(val))}, 0.1)`,
-        border: `2px solid ${wc(val)}40`,
-        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-      }}>
-        <span style={{ fontSize: 16, fontWeight: 700, color: wc(val) }}>{Math.round(val)}</span>
-        <span style={{ fontSize: 10, color: "rgba(0,0,0,0.35)" }}>kg</span>
-      </div>
-      <span style={{ fontSize: 11, color: "rgba(0,0,0,0.4)" }}>{label}</span>
-    </div>
-  );
+
+  const W = 360, H = 200, PAD = 20;
+  const L = tractorGeom?.wheelbase || 2.6;
+  const TF = tractorGeom?.track_front || 2.0;
+  const TR = tractorGeom?.track_rear || 2.0;
+  const rWx = L * 0.32, rWy = TR * 0.185;
+  const fWx = L * 0.24, fWy = TF * 0.158;
+  // inclut l'étendue réelle des roues AR décalées pour centrer verticalement
+  const rearYHalf = TR/2 + TR * 0.08 + rWy;
+  const maxDim = Math.max(L * 1.1, Math.max(TF/2 + fWy, rearYHalf) * 2);
+  const scale = Math.min((W - 2*PAD) / maxDim, (H - 2*PAD) / maxDim);
+  const cx = W / 2 + L * 0.02 * scale, cy = H / 2;
+  const tx = x => cx + x * scale;
+  const ty = y => cy - y * scale;
+  const bodyHW = TR * 0.37;
+  const bx1 = -L/2 - L*0.15, bx2 = L * 0.03;
+  const hx1 = bx2, hx2 = L/2 + fWx + L * 0.04;
+  const hHW1 = bodyHW * 0.55, hHW2 = TF * 0.21;
+  const bridgeHX = L * 0.045;
+  const bridgeY0 = hHW2, bridgeY1 = TF/2 - fWy;
+  const tf = "rgba(0,0,0,0.08)", ts = "rgba(0,0,0,0.22)";
+  const wf = "rgba(0,0,0,0.12)", ws = "rgba(0,0,0,0.24)";
+
+  const r = 7;
+  const Ax = tx(hx1), Ay = ty(hHW1);
+  const Bx = tx(hx2), By = ty(hHW2);
+  const Cx = tx(hx2), Cy = ty(-hHW2);
+  const Dx = tx(hx1), Dy = ty(-hHW1);
+  const ABlen = Math.sqrt((Bx-Ax)**2 + (By-Ay)**2);
+  const CDlen = Math.sqrt((Dx-Cx)**2 + (Dy-Cy)**2);
+  const ABux = (Bx-Ax)/ABlen, ABuy = (By-Ay)/ABlen;
+  const CDux = (Dx-Cx)/CDlen, CDuy = (Dy-Cy)/CDlen;
+  const hoodPath = [
+    `M ${Ax.toFixed(1)},${Ay.toFixed(1)}`,
+    `L ${(Bx - r*ABux).toFixed(1)},${(By - r*ABuy).toFixed(1)}`,
+    `Q ${Bx.toFixed(1)},${By.toFixed(1)} ${Bx.toFixed(1)},${(By + r).toFixed(1)}`,
+    `L ${Cx.toFixed(1)},${(Cy - r).toFixed(1)}`,
+    `Q ${Cx.toFixed(1)},${Cy.toFixed(1)} ${(Cx + r*CDux).toFixed(1)},${(Cy + r*CDuy).toFixed(1)}`,
+    `L ${Dx.toFixed(1)},${Dy.toFixed(1)}`, `Z`,
+  ].join(' ');
+
+  const renderWheel = (val, label, xc, yc, hx, hy) => {
+    const color = wc(val);
+    const rgb = hexToRgb(color);
+    const sw = hx * 2 * scale, sh = hy * 2 * scale;
+    const sx = tx(xc - hx), sy = ty(yc + hy);
+    const rxRect = Math.min(sw, sh) * 0.28;
+    const midX = tx(xc), midY = ty(yc);
+    const fsVal = Math.max(8, Math.min(13, sh * 0.38));
+    const fsSm  = Math.max(6, Math.min(9,  sh * 0.22));
+    // label above rect for left-side wheels (yc > 0), below for right-side (yc < 0)
+    const labelY = yc > 0 ? ty(yc + hy) - 4 : ty(yc - hy) + fsSm + 3;
+    return (
+      <g key={label}>
+        <rect x={sx} y={sy} width={sw} height={sh} rx={rxRect}
+          fill={`rgba(${rgb}, 0.13)`} stroke={color} strokeWidth="1.5"/>
+        <text x={midX} y={midY} textAnchor="middle" dominantBaseline="middle"
+          fontSize={fsVal} fill={color} fontWeight="700">{Math.round(val)} kg</text>
+        <text x={midX} y={labelY} textAnchor="middle"
+          fontSize={fsSm} fill="rgba(0,0,0,0.45)" fontWeight="500">{label}</text>
+      </g>
+    );
+  };
+
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 56px 1fr", gap: 8, alignItems: "center", maxWidth: 280, margin: "0 auto" }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-        <Wheel val={FL} label={t.fl}/><Wheel val={RL} label={t.rl}/>
-      </div>
-      <div style={{ height: 110, border: "1.5px solid rgba(0,0,0,0.06)", borderRadius: 12, background: "rgba(0,0,0,0.02)" }}/>
-      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-        <Wheel val={FR} label={t.fr}/><Wheel val={RR} label={t.rr}/>
-      </div>
-    </div>
+    <svg width="100%" viewBox={`0 0 ${W} ${H}`}>
+      <path d={hoodPath} fill={tf} stroke={ts} strokeWidth="1"/>
+      <rect x={tx(bx1)} y={ty(bodyHW)} width={(bx2-bx1)*scale} height={bodyHW*2*scale} rx="5" fill={tf} stroke={ts} strokeWidth="1"/>
+      <rect x={tx(L/2 - bridgeHX)} y={ty(bridgeY1)} width={bridgeHX*2*scale} height={(bridgeY1-bridgeY0)*scale} fill={wf} stroke={ws} strokeWidth="1"/>
+      <rect x={tx(L/2 - bridgeHX)} y={ty(-bridgeY0)} width={bridgeHX*2*scale} height={(bridgeY1-bridgeY0)*scale} fill={wf} stroke={ws} strokeWidth="1"/>
+      {renderWheel(RL, t.rl, -L/2,  TR/2 + TR*0.08, rWx, rWy)}
+      {renderWheel(RR, t.rr, -L/2, -TR/2 - TR*0.08, rWx, rWy)}
+      {renderWheel(FL, t.fl,  L/2,  TF/2, fWx, fWy)}
+      {renderWheel(FR, t.fr,  L/2, -TF/2, fWx, fWy)}
+    </svg>
   );
 }
 
@@ -852,7 +962,7 @@ export default function SimulateurStabilite() {
                     <div style={{ display: "grid", gridTemplateColumns: isNarrow ? "1fr" : "1fr 1fr", gap: 12 }}>
                       <Glass style={{ padding: "16px" }}>
                         <div style={{ fontSize: 10, color: "rgba(0,0,0,0.35)", marginBottom: 14, textTransform: "uppercase", letterSpacing: 1 }}>{t.wheelLoads}</div>
-                        <WheelGrid loads={loads} total={cg?.mass_total || 1} t={t}/>
+                        <WheelGrid loads={loads} total={cg?.mass_total || 1} t={t} tractorGeom={activeTractor}/>
                       </Glass>
                       <Glass style={{ padding: "16px" }}>
                         <div style={{ fontSize: 10, fontWeight: 600, color: "rgba(0,0,0,0.35)", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>{t.criteria}</div>
