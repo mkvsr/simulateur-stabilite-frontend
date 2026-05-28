@@ -686,7 +686,7 @@ export default function SimulateurStabilite() {
                 <Glass style={{ flex: "2 1 400px", minWidth: 0, order: isNarrow ? 0 : 1, padding: "16px", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: 200, maxWidth: (!isNarrow && tractorVisMaxW) ? tractorVisMaxW : undefined }}>
                   <div style={{ position: "relative", flex: 1, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 0, overflow: "hidden", borderRadius: 12 }}>
                     <div key={activeTractor?.key} style={{ position: "absolute", inset: 0 }}>
-                      <TractorImage tractorKey={activeTractor.key} color={tractorColor} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}/>
+                      <TractorImage tractorKey={activeTractor.key} color={tractorColor} style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "center" }}/>
                     </div>
                     <div style={{ position: "absolute", left: 8, top: "50%", transform: "translateY(-50%)", zIndex: 1 }}>
                       <ArrowBtn onClick={goTractorPrev} disabled={tractorIdx === 0} dir="prev"/>
