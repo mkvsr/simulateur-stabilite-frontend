@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
 
-const API_URL = "https://simulateur-stabilite-maneko.onrender.com";
+const API_URL = import.meta.env.VITE_API_URL || "https://simulateur-stabilite-maneko.onrender.com";
 
 const TRACTOR_BRANDS = [
   { key: "Case", color: "#D2232A" },
@@ -408,6 +408,7 @@ export default function SimulateurStabilite() {
   });
   const [env, setEnv] = useState({ slope_lat: 0, slope_long: 0, speed: 0, turn_radius: 0, accel_long: 0 });
   const [isNarrow, setIsNarrow] = useState(false);
+  const [resultTab, setResultTab] = useState("transport");
   const [tractorVisMaxW, setTractorVisMaxW] = useState(null);
   const tractorPropsRef = useRef(null);
 
@@ -480,7 +481,7 @@ export default function SimulateurStabilite() {
   }, [isNarrow]);
 
   useEffect(() => {
-    const fn = () => setIsNarrow(window.innerWidth < 600);
+    const fn = () => setIsNarrow(window.innerWidth < 900);
     fn();
     window.addEventListener("resize", fn);
     return () => window.removeEventListener("resize", fn);
@@ -802,10 +803,26 @@ export default function SimulateurStabilite() {
         {/* RÉSULTATS */}
         {result && (
           <>
-            <div style={{ fontSize: 10, fontWeight: 600, color: "rgba(0,0,0,0.35)", textTransform: "uppercase", letterSpacing: 1.5, padding: "0 4px" }}>{t.results}</div>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, padding: "0 4px" }}>
+              <div style={{ fontSize: 10, fontWeight: 600, color: "rgba(0,0,0,0.35)", textTransform: "uppercase", letterSpacing: 1.5, alignSelf: "flex-start" }}>{t.results}</div>
+              {isNarrow && (
+                <div style={{ display: "flex", borderRadius: 20, overflow: "hidden", border: "1px solid rgba(0,0,0,0.1)" }}>
+                  {["transport", "work"].map(m => (
+                    <button key={m} onClick={() => setResultTab(m)} style={{
+                      padding: "6px 16px", border: "none", fontSize: 12, cursor: "pointer",
+                      background: resultTab === m ? tractorColor : "rgba(255,255,255,0.5)",
+                      color: resultTab === m ? "#fff" : "rgba(0,0,0,0.4)",
+                      fontWeight: resultTab === m ? 700 : 400, transition: "all 0.18s",
+                    }}>
+                      {m === "transport" ? t.transport : t.work}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-              {["transport", "work"].map(m => {
+            <div style={{ display: "grid", gridTemplateColumns: isNarrow ? "1fr" : "1fr 1fr", gap: 16 }}>
+              {(isNarrow ? [resultTab] : ["transport", "work"]).map(m => {
                 const st = result[`static_${m}`];
                 const loads = result[m === "transport" ? "wheels_transport" : "wheels_work"];
                 const cg = result[m === "transport" ? "transport" : "work"];
