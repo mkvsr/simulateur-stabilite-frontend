@@ -3,6 +3,15 @@ import ReactDOM from "react-dom/client";
 import { supabase } from "./supabase";
 import Auth from "./Auth";
 import SimulateurStabilite from "./SimulateurStabilite";
+import LiquidGlassDemo from "./LiquidGlassDemo";
+
+// Bypass auth for component demo: add ?demo to the URL
+if (new URLSearchParams(location.search).has('demo')) {
+  ReactDOM.createRoot(document.getElementById("root")).render(
+    <React.StrictMode><LiquidGlassDemo /></React.StrictMode>
+  );
+  throw new Error('demo mode — halts normal boot');
+}
 
 function PendingApproval() {
   async function check() {
